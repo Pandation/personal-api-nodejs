@@ -17,7 +17,13 @@ const experienceSchema = new Schema({
   date: {
     type: String,
   },
+  language : {
+    type: String,
+    required: true
+  }
 });
+
+
 
 const ExperienceModel = mongoose.model("experience", experienceSchema);
 
