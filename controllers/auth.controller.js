@@ -27,6 +27,22 @@ module.exports.login = async (req, res) => {
   }
 };
 
+
+// TO FINISH
+module.exports.refresh = async (req, res) => {
+//   const token = req.headers["authorization"].split(' ')[1];
+//   console.log("tokenserv ", token)
+//   if (token) {
+//      const decoded = jwt.decode(token)
+
+//     if(isValidTkn) {
+//       const userObj = generateUserObj("Pandation")
+//       return res.json(userObj)
+//     } 
+//     return res.status(400)
+//   }
+}
+
 //fonctions à ranger/ classe avec méthodes statiques?
 function generateUserObj(username) {
   const token = generateToken(username);

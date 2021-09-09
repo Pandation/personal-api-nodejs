@@ -2,10 +2,10 @@ const ExperienceModel = require("../../models/portfolio/experience.model");
 
 module.exports.getAll = async (_, res) => {
   
-  const data = await ExperienceModel.find({});
-  if (!data[0]) res.json({ message: "No documents were found." });
-  console.log(data);
-  res.json(data);
+  const dataFR = await ExperienceModel.find({language: "fr"});
+  const dataEN = await ExperienceModel.find({language: "en"});
+  if (!dataFR[0] && !dataEN[0]) res.json({ message: "No documents were found." });
+  res.json({en: dataEN, fr: dataFR});
 };
 
 module.exports.create = async (req, res) => {
