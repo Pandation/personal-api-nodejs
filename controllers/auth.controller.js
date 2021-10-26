@@ -2,63 +2,63 @@ const UserModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-module.exports.login = async (req, res) => {
+module.exports.register = async (req, res) => {
   const { username, password } = req.body;
-  try {
-    const user = await UserModel.findOne({ username });
 
-    if (user) {
-      const isValidPwd = await bcrypt.compare(password, user.password);
-      if (isValidPwd) {
-        const userObj = generateUserObj(user.username);
-        return res.json(userObj);
-      }
-      return res.json({
-        auth: false,
-        message: "Wrong username/password combination.",
-      });
-    } else
-      res.json({
-        auth: false,
-        message: "Wrong username/password combination.",
-      });
-  } catch (err) {
-    res.json({ auth: false, message: err.message });
+  let hash = bcrypt.hashSync(password, 10);
+
+  await UserModel.create({ username, password: hash }, (err, data) => {
+    if (err)
+      return res.status(400).send({ message: err.message, status: true });
+    return res.send(data);
+  });
+};
+
+module.exports.login = async (req, res) => {
+  const username = req.body.username;
+  
+  const user = await UserModel.findOne({username});
+
+  if (user) {
+    if (!(await bcrypt.compare(req.body.password, user.password))) {
+      return res.status(400).send({ message: "Wrong credentials." });
+    }
+    
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+    
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.send({message: "success"})
   }
+  return res.status(400).send({ message : "Wrong credentials"});
 };
 
 
-// TO FINISH
-module.exports.refresh = async (req, res) => {
-//   const token = req.headers["authorization"].split(' ')[1];
-//   console.log("tokenserv ", token)
-//   if (token) {
-//      const decoded = jwt.decode(token)
+module.exports.logout = async (req, res) => {
 
-//     if(isValidTkn) {
-//       const userObj = generateUserObj("Pandation")
-//       return res.json(userObj)
-//     } 
-//     return res.status(400)
-//   }
+  res.cookie('jwt', '', {maxAge : 0});
+  
+  return res.send();
 }
 
-//fonctions à ranger/ classe avec méthodes statiques?
-function generateUserObj(username) {
-  const token = generateToken(username);
-  const refreshToken = generateRefreshToken(username);
-  return {
-    username,
-    auth: true,
-    token,
-    refreshToken,
-  };
-}
+module.exports.get_admin = async (req, res) => {
 
-function generateToken(username) {
-  return jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: "15m" });
-}
+  const cookie = req.cookies['jwt'];
 
-function generateRefreshToken(username) {
-  return jwt.sign({ username }, process.env.REFRESH_SECRET);
+  if(!cookie) {
+    return res.status(400).send({message : "Invalid authentication"})
+  }
+
+  const claims = jwt.verify(cookie, process.env.JWT_SECRET);
+
+  if(!claims) {
+    res.cookie('jwt', '', {maxAge : 0});
+    return res.status(400).send({message: "Invalid authentication"})
+  }
+
+  console.log(claims);
+  return res.send();
 }
