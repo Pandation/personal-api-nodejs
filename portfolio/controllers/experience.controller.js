@@ -1,19 +1,21 @@
-const ExperienceModel = require("../../models/portfolio/experience.model");
+const ExperienceModel = require("../models/experience.model");
 
 module.exports.getAll = async (_, res) => {
-  
-  const dataFR = await ExperienceModel.find({language: "fr"});
-  const dataEN = await ExperienceModel.find({language: "en"});
-  if (!dataFR[0] && !dataEN[0]) res.json({ message: "No documents were found." });
-  res.json({en: dataEN, fr: dataFR});
+  const data = await ExperienceModel.find();
+
+  if (!data[0]) res.json({ data: [], message: "No documents were found." });
+  res.json({ data });
 };
 
 module.exports.create = async (req, res) => {
-  const { jobTitle, society, place, date, language } = req.body;
-  ExperienceModel.create({ jobTitle, society, place, date, language }, (err, docs) => {
-    if (err) res.json({ err });
-    res.json(docs);
-  });
+  const { en, fr } = req.body;
+  ExperienceModel.create(
+    { en , fr },
+    (err, docs) => {
+      if (err) res.json({ err });
+      res.json(docs);
+    }
+  );
 };
 
 module.exports.delete = async (req, res) => {

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const experienceSchema = new Schema({
+const dataSchema = new Schema({
   jobTitle: {
     type: String,
     required: true,
@@ -17,10 +17,10 @@ const experienceSchema = new Schema({
   date: {
     type: String,
   },
-  language : {
-    type: String,
-    required: true
-  }
+})
+const experienceSchema = new Schema({
+  en : dataSchema,
+  fr: dataSchema
 });
 
 
