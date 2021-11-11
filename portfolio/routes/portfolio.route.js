@@ -7,10 +7,10 @@ const experienceController = require("../controllers/experience.controller");
 // const educationController = require("../controllers/education.controller");
 
 //CRUD EXPERIENCE
-router.get("/experience", experienceController.getAll);
-router.post("/experience", experienceController.create);
-router.delete("/experience/:id", experienceController.delete);
-router.put("/experience/:id", experienceController.update);
+router.get("/experiences", experienceController.getAll);
+router.post("/experiences", experienceController.create);
+router.delete("/experiences/:id", experienceController.delete);
+router.put("/experiences/:id", experienceController.update);
 
 //CRUD EDUCATION
 //CRUD PROJECTS

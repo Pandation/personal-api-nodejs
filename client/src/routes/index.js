@@ -1,53 +1,78 @@
-import { lazy } from 'react'
+import { lazy } from "react";
 
-// use lazy for better code splitting, a.k.a. load faster
-const Dashboard = lazy(() => import('../pages/Dashboard'))
-const Forms = lazy(() => import('../pages/Forms'))
-const Cards = lazy(() => import('../pages/Cards'))
-const Charts = lazy(() => import('../pages/Charts'))
-const Buttons = lazy(() => import('../pages/Buttons'))
-const Modals = lazy(() => import('../pages/Modals'))
-const Experiences = lazy(() => import('../pages/Experiences'))
-const Page404 = lazy(() => import('../pages/404'))
-const Blank = lazy(() => import('../pages/Blank'))
+const Dashboard = lazy(() => import("../pages/Dashboard"));
+const Projects = lazy(() => import("../pages/portfolio/Projects"));
+const Project = lazy(() => import("../pages/portfolio/Project"));
+const Learnings = lazy(() => import("../pages/portfolio/Learnings"));
+const Learning = lazy(() => import("../pages/portfolio/Learning"));
+const Skills = lazy(() => import("../pages/portfolio/Skills"));
+const Skill = lazy(() => import("../pages/portfolio/Skill"));
+const Experiences = lazy(() => import("../pages/portfolio/Experiences"));
+const Experience = lazy(() => import("../pages/portfolio/Experience"));
+const Educations = lazy(() => import("../pages/portfolio/Educations"));
+const Education = lazy(() => import("../pages/portfolio/Education"));
+const Test = lazy(() => import("../pages/Test"));
+
+const Page404 = lazy(() => import("../pages/404"));
+
 
 const routes = [
   {
-    path: '/', 
-    component: Dashboard, 
+    path: "/",
+    component: Dashboard,
   },
   {
-    path: '/pf/experiences',
+    path: "/pf/experiences",
     component: Experiences,
   },
-  // {
-  //   path: '/cards',
-  //   component: Cards,
-  // },
-  // {
-  //   path: '/charts',
-  //   component: Charts,
-  // },
-  // {
-  //   path: '/buttons',
-  //   component: Buttons,
-  // },
-  // {
-  //   path: '/modals',
-  //   component: Modals,
-  // },
-  // {
-  //   path: '/tables',
-  //   component: Tables,
-  // },
   {
-    path: '/404',
+    path: "/pf/experiences/:id",
+    component: Experience,
+  },
+  {
+    path: "/pf/projects",
+    component: Projects,
+  },
+  {
+    path: "/pf/projects/:id",
+    component: Project,
+  },
+  {
+    path: "/pf/learnings",
+    component: Learnings,
+  },
+  {
+    path: "/pf/learnings/:id",
+    component: Learning,
+  },
+  {
+    path: "/pf/skills",
+    component: Skills,
+  },
+  {
+    path: "/pf/skills/:id",
+    component: Skill,
+  },
+  {
+    path: "/pf/educations",
+    component: Educations,
+  },
+  {
+    path: "/pf/educations/:id",
+    component: Education,
+  },
+  {
+    path: '/test',
+    component: Test,
+  },
+  {
+    path: "/404",
     component: Page404,
   },
   // {
   //   path: '/blank',
   //   component: Blank,
   // },
-]
+];
 
-export default routes
+export default routes;

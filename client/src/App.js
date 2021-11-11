@@ -2,11 +2,9 @@ import React, { lazy } from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect,
+  Route
 } from "react-router-dom";
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
-import Dashboard from "./pages/Dashboard";
 import SessionProvider from "./reducers/session";
 
 const Layout = lazy(() => import("./containers/Layout"));

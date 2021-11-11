@@ -17,7 +17,7 @@ const withAuth = (Component) => (props) => {
   }
 
   if (session.fetching) {
-    return <div>Loading...</div>;
+    return <p>Chargement</p>;
   }
 
   return <>{session.loggedIn && <Component {...props} />}</>;
