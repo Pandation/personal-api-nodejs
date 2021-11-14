@@ -1,9 +1,7 @@
 import React, { lazy } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 import AccessibleNavigationAnnouncer from "./components/AccessibleNavigationAnnouncer";
 import SessionProvider from "./reducers/session";
 
@@ -16,17 +14,19 @@ function App() {
   return (
     <>
       <SessionProvider>
-        <Router>
-          <AccessibleNavigationAnnouncer />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/create-account" component={CreateAccount} />
-            <Route path="/forgot-password" component={ForgotPassword} />
+        <Provider store={store}>
+          <Router>
+            <AccessibleNavigationAnnouncer />
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/create-account" component={CreateAccount} />
+              <Route path="/forgot-password" component={ForgotPassword} />
 
-            {/* Place new routes over this */}
-            <Route path="/" component={Layout} />
-          </Switch>
-        </Router>
+              {/* Place new routes over this */}
+              <Route path="/" component={Layout} />
+            </Switch>
+          </Router>
+        </Provider>
       </SessionProvider>
     </>
   );

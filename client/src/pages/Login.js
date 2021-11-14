@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import ImageLight from "../assets/img/login-office.jpeg";
 import ImageDark from "../assets/img/login-office-dark.jpeg";
 import { Label, Input, Button } from "@windmill/react-ui";
-import { SessionContext, AUTH } from "src/reducers/session";
+import { SessionContext, AUTH } from "../reducers/session";
 
 function Login() {
   const [credentials, setCredentials] = useState({
@@ -13,7 +13,6 @@ function Login() {
   });
   const { session, login, dispatch } = React.useContext(SessionContext);
 
-  console.log(session)
   useEffect(() => {
     dispatch({ type: AUTH.GET_ADMIN });
   }, []);

@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import Main from "../containers/Main";
 import ThemedSuspense from "../components/ThemedSuspense";
 import { SidebarContext } from "../context/SidebarContext";
-import withAuth from "src/hoc/withAuth";
+import withAuth from "../hoc/withAuth";
 
 const Page404 = lazy(() => import("../pages/404"));
 

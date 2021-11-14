@@ -9,7 +9,7 @@ import {
   OutlineLogoutIcon,
 } from '../icons'
 import { Avatar, Input, Dropdown, DropdownItem, WindmillContext } from '@windmill/react-ui'
-import { SessionContext } from 'src/reducers/session'
+import { SessionContext } from '../reducers/session'
 
 function Header() {
   const {logout} = React.useContext(SessionContext);

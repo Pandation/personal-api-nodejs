@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const educationSchema = new Schema({
+const dataSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -17,6 +17,10 @@ const educationSchema = new Schema({
   date: {
     type: String,
   },
+});
+const educationSchema = new Schema({
+  en: dataSchema,
+  fr: dataSchema,
 });
 
 const EducationModel = mongoose.model("education", educationSchema);

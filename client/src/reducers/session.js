@@ -26,7 +26,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log("ici reducer")
   switch (action.type) {
     case AUTH.LOGIN_FAILED:
       return {

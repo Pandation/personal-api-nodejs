@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useEffect } from "react";
 
-import CTA from '../components/CTA'
-import PageTitle from '../components/Typography/PageTitle'
-import SectionTitle from '../components/Typography/SectionTitle'
-import { Input, HelperText, Label, Select, Textarea } from '@windmill/react-ui'
+import CTA from "../components/CTA";
+import PageTitle from "../components/Typography/PageTitle";
+import SectionTitle from "../components/Typography/SectionTitle";
+import { Input, HelperText, Label, Select, Textarea } from "@windmill/react-ui";
 
-import { MailIcon } from '../icons'
-
+import { MailIcon } from "../icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getTest } from "../redux/features/portfolio/test";
 function Forms() {
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.test.collection.items);
+
+  useEffect(() => {
+    dispatch(getTest());
+  }, [dispatch]);
   return (
     <>
       <div className="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -35,7 +42,12 @@ function Forms() {
               <span className="ml-2">Business</span>
             </Label>
             <Label disabled className="ml-6" radio>
-              <Input disabled type="radio" value="disabled" name="accountType" />
+              <Input
+                disabled
+                type="radio"
+                value="disabled"
+                name="accountType"
+              />
               <span className="ml-2">Disabled</span>
             </Label>
           </div>
@@ -64,7 +76,11 @@ function Forms() {
 
         <Label className="mt-4">
           <span>Message</span>
-          <Textarea className="mt-1" rows="3" placeholder="Enter some long form content." />
+          <Textarea
+            className="mt-1"
+            rows="3"
+            placeholder="Enter some long form content."
+          />
         </Label>
 
         <Label className="mt-6" check>
@@ -93,7 +109,9 @@ function Forms() {
         <Label className="mt-4">
           <span>Helper text</span>
           <Input className="mt-1" placeholder="Jane Doe" />
-          <HelperText>Your password must be at least 6 characters long.</HelperText>
+          <HelperText>
+            Your password must be at least 6 characters long.
+          </HelperText>
         </Label>
       </div>
 
@@ -161,7 +179,7 @@ function Forms() {
         </Label>
       </div>
     </>
-  )
+  );
 }
 
-export default Forms
+export default Forms;

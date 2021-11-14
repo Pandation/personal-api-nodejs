@@ -1,48 +1,38 @@
-const UserModel = require("../models/user.model");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const ProjectModel = require("../models/project.model");
 
-module.exports.login = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = await UserModel.findOne({ username });
+module.exports.getAll = async (_, res) => {
+  const data = await ProjectModel.find();
 
-    if (user) {
-      const isValidPwd = await bcrypt.compare(password, user.password);
-      if (isValidPwd) {
-        const userObj = generateUserObj(user.username);
-        return res.json(userObj);
-      }
-      return res.json({
-        auth: false,
-        message: "Wrong username/password combination.",
-      });
-    } else
-      res.json({
-        auth: false,
-        message: "Wrong username/password combination.",
-      });
-  } catch (err) {
-    res.json({ auth: false, message: err.message });
-  }
+  if (!data[0]) return res.json({ data: [], message: "No documents were found." });
+  return res.send({ data });
 };
 
-//fonctions à ranger/ classe avec méthodes statiques?
-function generateUserObj(username) {
-  const token = generateToken(username);
-  const refreshToken = generateRefreshToken(username);
-  return {
-    username,
-    auth: true,
-    token,
-    refreshToken,
-  };
-}
+module.exports.create = async (req, res) => {
+  const { en, fr } = req.body;
+  ProjectModel.create({ en, fr }, (err, docs) => {
+    if (err) return res.json({ err });
+    return res.send({ data: docs });
+  });
+};
 
-function generateToken(username) {
-  return jwt.sign({ username }, process.env.JWT_SECRET, { expiresIn: "15m" });
-}
+module.exports.delete = async (req, res) => {
+  const { id } = req.params;
+  ProjectModel.findByIdAndDelete(id, {}, (err, docs) => {
+    if (err) return res.json({ err });
+    return res.json(docs);
+  });
+};
 
-function generateRefreshToken(username) {
-  return jwt.sign({ username }, process.env.REFRESH_SECRET);
-}
+module.exports.update = async (req, res) => {
+  const { id } = req.params;
+  const { jobTitle, society, place, date } = req.body;
+  ProjectModel.findByIdAndUpdate(
+    id,
+    { jobTitle, society, place, date },
+    {},
+    (err, docs) => {
+      if (err) return res.json({ err });
+      return res.json(docs);
+    }
+  );
+};
