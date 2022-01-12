@@ -17,7 +17,8 @@ const dataSchema = new Schema({
   date: {
     type: String,
   },
-})
+});
+
 const experienceSchema = new Schema({
   en : dataSchema,
   fr: dataSchema

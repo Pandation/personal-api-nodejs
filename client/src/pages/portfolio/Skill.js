@@ -1,56 +1,94 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import PageTitle from "../../components/Typography/PageTitle";
-import { Input, Label } from "@windmill/react-ui";
+import { Input, Label, Textarea, Button } from "@windmill/react-ui";
 import SectionTitle from "../../components/Typography/SectionTitle";
+import { EditIcon } from "../../icons";
+
+import { Skills } from "../../redux/features/portfolio/skills";
+
+import { skillsSchema } from "../../configs/modelSchemas";
 
 function SkillPage() {
+  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState(skillsSchema);
+
+  const updateValues = (language) => {
+    return (e) =>
+      setFormValues({
+        ...formValues,
+        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+      });
+  };
+
+  const deleteItem = (id) => {
+    return () => {
+      dispatch(Skills.deleteItem(id));
+    };
+  };
+  const save = () => {
+    for (const languages in formValues) {
+      for (const key in languages) {
+        if (languages[key] === "") {
+          return;
+        }
+      }
+    }
+    dispatch(Skills.create(formValues));
+  };
+
   return (
     <>
       <PageTitle>Skill</PageTitle>
-      <div>
+      <div className="flex flex-col">
         <div className="flex">
-          <div className="flex-1 px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <SectionTitle>Français</SectionTitle>
             <Label>
-              <span>Expérience</span>
-              <Input className="mt-1" placeholder="Développeur FullStack" />
+              <span>Nom</span>
+              <Input
+                name="name"
+                className="mt-1"
+                placeholder="JavaScript"
+                onChange={updateValues("fr")}
+              />
             </Label>
             <Label>
-              <span>Société</span>
-              <Input className="mt-1" placeholder="SuperStartup" />
-            </Label>
-
-            <Label>
-              <span>Lieu</span>
-              <Input className="mt-1" placeholder="Montpellier 34" />
-            </Label>
-            <Label>
-              <span>Date</span>
-              <Input className="mt-1" placeholder="Novembre 2021" />
+              <span>Texte</span>
+              <Textarea
+                name="text"
+                className="mt-1"
+                rows="3"
+                placeholder="..."
+              />
             </Label>
           </div>
-          <div className="flex-1 px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <SectionTitle>English</SectionTitle>
             <Label>
-              <span>Experience</span>
-              <Input className="mt-1" placeholder="FullStack Developer" />
+              <span>Name</span>
+              <Input
+                name="name"
+                className="mt-1"
+                placeholder="JavaScript"
+                onChange={updateValues("en")}
+              />
             </Label>
             <Label>
-              <span>Society</span>
-              <Input className="mt-1" placeholder="SuperStartup" />
-            </Label>
-
-            <Label>
-              <span>Place</span>
-              <Input className="mt-1" placeholder="Montpellier 34" />
-            </Label>
-            <Label>
-              <span>Date</span>
-              <Input className="mt-1" placeholder="November 2021" />
+              <span>Text</span>
+              <Textarea
+                name="text"
+                className="mt-1"
+                rows="3"
+                placeholder="..."
+              />
             </Label>
           </div>
         </div>
+        <Button className="mb-5 self-end" iconLeft={EditIcon} onClick={save}>
+          Ajouter
+        </Button>
       </div>
     </>
   );

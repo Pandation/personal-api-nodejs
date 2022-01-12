@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -11,36 +11,23 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
   Input,
   Label,
   Button,
   Pagination,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon } from "../../icons";
-
-import response from "../../utils/demo/tableData";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Projects } from "../../redux/features/portfolio/projects";
 
-const initialSchema = {
-  jobTitle: "",
-  society: "",
-  place: "",
-  date: "",
-};
+import { projectsSchema } from "../../configs/modelSchemas";
 
-const initialState = {
-  en: { ...initialSchema },
-  fr: { ...initialSchema },
-};
 function ProjectsPage() {
   const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState(projectsSchema);
   const collection = useSelector((state) => state.projects.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(initialState);
-
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
   // setup data for every table
@@ -58,12 +45,22 @@ function ProjectsPage() {
   function onPageChangeTable(p) {
     setPageTable(p);
   }
-  const updateValues = (language) => {
+  const updateValues = (language = false) => {
+    if (!language) {
+      return (e) => setFormValues({ ...formValues, url: e.target.value });
+    }
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+        [language]: {
+          ...formValues[language],
+          [e.target.name]: e.target.value,
+        },
       });
+  };
+  const updateUpload = (e) => {
+    const file = e.target.files[0];
+    setFormValues({ ...formValues, file });
   };
 
   const deleteItem = (id) => {
@@ -72,14 +69,22 @@ function ProjectsPage() {
     };
   };
   const save = () => {
-    for (const languages in formValues) {
-      for (const key in languages) {
-        if (languages[key] === "") {
-          return;
+    const FORM_DATA = new FormData();
+    for (const formKey in formValues) {
+      if (formKey === "en" || formKey === "fr") {
+        let data = {};
+        for (const key in formValues[formKey]) {
+          if (formValues[formKey][key] === "" || undefined) {
+            return;
+          }
+          data[key] = formValues[formKey][key];
+          FORM_DATA.append(key, JSON.stringify(data));
         }
+      } else if (formKey === "url") {
+        FORM_DATA.append(formKey, formValues[formKey]);
       }
     }
-    dispatch(Projects.create(formValues));
+    dispatch(Projects.upload(FORM_DATA));
   };
   useEffect(() => {
     if (collection.items.length > 0) {
@@ -104,35 +109,25 @@ function ProjectsPage() {
           {isFormOpen ? "Fermer" : "Ajouter"}
         </Button>
         {isFormOpen && (
-          <div className="flex flex-col">
+          <div className="flex flex-col px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div className="flex">
               <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <SectionTitle>Français</SectionTitle>
                 <Label>
-                  <span>Expérience</span>
+                  <span>Name</span>
                   <Input
-                    name="jobTitle"
+                    name="name"
                     className="mt-1"
-                    placeholder="Développeur FullStack"
+                    placeholder="Crazy Party"
                     onChange={updateValues("fr")}
                   />
                 </Label>
                 <Label>
-                  <span>Société</span>
+                  <span>Stacks</span>
                   <Input
-                    name="society"
+                    name="stacks"
                     className="mt-1"
-                    placeholder="SuperStartup"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-
-                <Label>
-                  <span>Lieu</span>
-                  <Input
-                    name="place"
-                    className="mt-1"
-                    placeholder="Montpellier 34"
+                    placeholder="Stacks"
                     onChange={updateValues("fr")}
                   />
                 </Label>
@@ -149,30 +144,20 @@ function ProjectsPage() {
               <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <SectionTitle>English</SectionTitle>
                 <Label>
-                  <span>Project</span>
+                  <span>Name</span>
                   <Input
-                    name="jobTitle"
+                    name="name"
                     className="mt-1"
-                    placeholder="FullStack Developer"
+                    placeholder="Crazy Party"
                     onChange={updateValues("en")}
                   />
                 </Label>
                 <Label>
-                  <span>Society</span>
+                  <span>Stacks</span>
                   <Input
-                    name="society"
+                    name="stacks"
                     className="mt-1"
-                    placeholder="SuperStartup"
-                    onChange={updateValues("en")}
-                  />
-                </Label>
-
-                <Label>
-                  <span>Place</span>
-                  <Input
-                    name="place"
-                    className="mt-1"
-                    placeholder="Montpellier 34"
+                    placeholder="Stacks"
                     onChange={updateValues("en")}
                   />
                 </Label>
@@ -181,12 +166,22 @@ function ProjectsPage() {
                   <Input
                     name="date"
                     className="mt-1"
-                    placeholder="November 2021"
+                    placeholder="Novembre 2021"
                     onChange={updateValues("en")}
                   />
                 </Label>
               </div>
             </div>
+            <Label>
+              <span>Image</span>
+              {/* <Input
+                name="url"
+                className="mt-1"
+                placeholder="Montpellier 34"
+                onChange={updateValues()}
+              /> */}
+              <input type="file" onChange={updateUpload} name="file" />
+            </Label>
             <Button
               className="mb-5 self-end"
               iconLeft={EditIcon}
@@ -203,30 +198,28 @@ function ProjectsPage() {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>Project</TableCell>
-                <TableCell>Society</TableCell>
-                <TableCell>Place</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Stacks</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Actions</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
+                console.log(document);
                 return (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <div>
-                          <p className="font-semibold">
-                            {document.fr.jobTitle}
-                          </p>
+                          <p className="font-semibold">{document.fr.name}</p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm">$ {document.fr.society}</span>
                     </TableCell>
-                    <TableCell>{document.fr.place}</TableCell>
+                    <TableCell>{document.fr.stacks}</TableCell>
                     <TableCell>
                       <span className="text-sm">{document.fr.date}</span>
                     </TableCell>

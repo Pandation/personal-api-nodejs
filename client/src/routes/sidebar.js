@@ -59,10 +59,10 @@ const routes = [
         path: '/pf/skills',
         name: 'Skills',
       },
-      {
-        path: '/pf/projects',
-        name: 'Projects',
-      },
+      // {
+      //   path: '/pf/projects',
+      //   name: 'Projects',
+      // },
       {
         path: '/pf/learnings',
         name: 'Learnings',

@@ -29,14 +29,14 @@ const routes = [
     path: "/pf/experiences/:id",
     component: Experience,
   },
-  {
-    path: "/pf/projects",
-    component: Projects,
-  },
-  {
-    path: "/pf/projects/:id",
-    component: Project,
-  },
+  // {
+  //   path: "/pf/projects",
+  //   component: Projects,
+  // },
+  // {
+  //   path: "/pf/projects/:id",
+  //   component: Project,
+  // },
   {
     path: "/pf/learnings",
     component: Learnings,

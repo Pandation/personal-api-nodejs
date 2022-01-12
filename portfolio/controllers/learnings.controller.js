@@ -3,13 +3,14 @@ const LearningModel = require("../models/learning.model");
 module.exports.getAll = async (_, res) => {
   const data = await LearningModel.find();
 
-  if (!data[0]) return res.json({ data: [], message: "No documents were found." });
+  if (!data[0])
+    return res.json({ data: [], message: "No documents were found." });
   return res.send({ data });
 };
 
 module.exports.create = async (req, res) => {
-  const { en, fr } = req.body;
-  LearningModel.create({ en, fr }, (err, docs) => {
+  const { name } = req.body;
+  LearningModel.create({ name }, (err, docs) => {
     if (err) return res.json({ err });
     return res.send({ data: docs });
   });

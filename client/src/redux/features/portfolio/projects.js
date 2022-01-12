@@ -1,7 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import createGenericReducer from "../../generics/createGenericReducer";
 
-const projects = createGenericReducer("projects");
+const type = "projects";
+const projects = createGenericReducer(type);
+
+const url = `http://localhost:5000/api/portfolio/${type}`;
 
 const projectsSlice = createSlice({
   name: "projects",
@@ -26,6 +29,21 @@ const projectsSlice = createSlice({
 export const Projects = {
   ...projectsSlice.actions,
   ...projects.actions,
+  upload: createProjects(type, url),
 };
 export default projectsSlice.reducer;
 
+function createProjects(type, url) {
+  const upload = createAsyncThunk(
+    `${type}/upload`,
+    async (formData, callback = "") => {
+      const data = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+      return await data.json();
+    }
+  );
+
+  return upload;
+}

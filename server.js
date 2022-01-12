@@ -22,14 +22,18 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(express.static("./client/build/"));
+app.use(express.static("./public/uploads/"));
 
+app.get("/test", (_,res)=>{
+  res.sendFile(__dirname + "/public/uploads")
+})
 //REACT APP ADMIN OFFICE
 app.get("/", (req, res) => {
-  res.sendFile(__dirname+"/client/build/index.html");
+  res.sendFile(__dirname + "/client/build/index.html");
 });
 
 //API
-app.use("/api/*", apiRoutes)
+app.use("/api/*", apiRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 

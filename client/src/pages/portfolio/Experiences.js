@@ -11,7 +11,6 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
   Input,
   Label,
   Button,
@@ -19,27 +18,17 @@ import {
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon } from "../../icons";
 
-import response from "../../utils/demo/tableData";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Experiences } from "../../redux/features/portfolio/experiences";
+import { experiencesSchema } from "../../configs/modelSchemas";
 
-const initialSchema = {
-  jobTitle: "",
-  society: "",
-  place: "",
-  date: "",
-};
 
-const initialState = {
-  en: { ...initialSchema },
-  fr: { ...initialSchema },
-};
 function ExperiencesPage() {
   const dispatch = useDispatch();
   const collection = useSelector((state) => state.experiences.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(initialState);
+  const [formValues, setFormValues] = useState(experiencesSchema);
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -62,7 +51,7 @@ function ExperiencesPage() {
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+        [language]: { ...formValues[language], [e.target.name]: e.target.value },
       });
   };
 
@@ -224,7 +213,7 @@ function ExperiencesPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {document.fr.society}</span>
+                      <span className="text-sm">{document.fr.society}</span>
                     </TableCell>
                     <TableCell>{document.fr.place}</TableCell>
                     <TableCell>

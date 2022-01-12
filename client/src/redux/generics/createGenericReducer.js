@@ -1,31 +1,12 @@
-import {  createAsyncThunk } from "@reduxjs/toolkit";
+import createGeneric from "./create";
+import getAllGeneric from "./getAll";
+import deleteItemGeneric from "./deleteItem";
 
 function createGenericReducer(type) {
   const url = `http://localhost:5000/api/portfolio/${type}`;
-  const getAll = createAsyncThunk(`${type}/getAll`, async () => {
-    const data = await fetch(url);
-    return await data.json();
-  });
-  const create = createAsyncThunk(
-    `${type}/create`,
-    async (params = {}, callback = "") => {
-      const data = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-      });
-      return await data.json();
-    }
-  );
-  const deleteItem = createAsyncThunk(
-    `${type}/delete`,
-    async (id, callback = "") => {
-      const data = await fetch(url + "/" + id, {
-        method: "DELETE",
-      });
-      return await data.json();
-    }
-  );
+  const getAll = getAllGeneric(type, url);
+  const create = createGeneric(type, url);
+  const deleteItem = deleteItemGeneric(type, url);
 
   const pending = (key) => (state) => {
     state[key].fetching = true;

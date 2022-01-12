@@ -1,56 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import PageTitle from "../../components/Typography/PageTitle";
-import { Input, Label } from "@windmill/react-ui";
+import { Input, Label, Button } from "@windmill/react-ui";
 import SectionTitle from "../../components/Typography/SectionTitle";
+import { EditIcon } from "../../icons";
+
+import { Learnings } from "../../redux/features/portfolio/learnings";
+
+import { learningsSchema } from "../../configs/modelSchemas";
 
 function LearningPage() {
+  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState(learningsSchema);
+
+  const updateValues = (e) => {
+    setFormValues({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // const deleteItem = (id) => {
+  //   return () => {
+  //     dispatch(Learnings.deleteItem(id));
+  //   };
+  // };
+
+  const save = () => {
+    dispatch(Learnings.create(formValues));
+  };
+
   return (
     <>
       <PageTitle>Learning</PageTitle>
-      <div>
-        <div className="flex">
-          <div className="flex-1 px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <SectionTitle>Français</SectionTitle>
+      <div className="flex flex-col">
+        <div className="flex-col">
+          <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <Label>
-              <span>Expérience</span>
-              <Input className="mt-1" placeholder="Développeur FullStack" />
-            </Label>
-            <Label>
-              <span>Société</span>
-              <Input className="mt-1" placeholder="SuperStartup" />
-            </Label>
-
-            <Label>
-              <span>Lieu</span>
-              <Input className="mt-1" placeholder="Montpellier 34" />
-            </Label>
-            <Label>
-              <span>Date</span>
-              <Input className="mt-1" placeholder="Novembre 2021" />
-            </Label>
-          </div>
-          <div className="flex-1 px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <SectionTitle>English</SectionTitle>
-            <Label>
-              <span>Experience</span>
-              <Input className="mt-1" placeholder="FullStack Developer" />
-            </Label>
-            <Label>
-              <span>Society</span>
-              <Input className="mt-1" placeholder="SuperStartup" />
-            </Label>
-
-            <Label>
-              <span>Place</span>
-              <Input className="mt-1" placeholder="Montpellier 34" />
-            </Label>
-            <Label>
-              <span>Date</span>
-              <Input className="mt-1" placeholder="November 2021" />
+              <span>Learning</span>
+              <Input
+                name="name"
+                className="mt-1"
+                placeholder="TypeScript"
+                onChange={updateValues("en")}
+              />
             </Label>
           </div>
         </div>
+        <Button className="mb-5 self-end" iconLeft={EditIcon} onClick={save}>
+          Ajouter
+        </Button>
       </div>
     </>
   );

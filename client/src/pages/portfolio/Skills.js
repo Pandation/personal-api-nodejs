@@ -11,7 +11,7 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
+  Textarea,
   Input,
   Label,
   Button,
@@ -23,21 +23,13 @@ import response from "../../utils/demo/tableData";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Skills } from "../../redux/features/portfolio/skills";
+import { skillsSchema } from "../../configs/modelSchemas";
 
-const initialSchema = {
-  name: "",
-  text: "",
-};
-
-const initialState = {
-  en: { ...initialSchema },
-  fr: { ...initialSchema },
-};
 function SkillsPage() {
   const dispatch = useDispatch();
   const collection = useSelector((state) => state.skills.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(initialState);
+  const [formValues, setFormValues] = useState(skillsSchema);
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -60,7 +52,7 @@ function SkillsPage() {
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+        [language]: { ...formValues[language], [e.target.name]: e.target.value },
       });
   };
 
@@ -117,9 +109,10 @@ function SkillsPage() {
                 </Label>
                 <Label>
                   <span>Texte</span>
-                  <Input
+                  <Textarea
                     name="text"
                     className="mt-1"
+                    rows="3"
                     placeholder="..."
                     onChange={updateValues("fr")}
                   />
@@ -138,9 +131,10 @@ function SkillsPage() {
                 </Label>
                 <Label>
                   <span>Text</span>
-                  <Input
+                  <Textarea
                     name="text"
                     className="mt-1"
+                    rows="3"
                     placeholder="..."
                     onChange={updateValues("en")}
                   />
@@ -175,9 +169,7 @@ function SkillsPage() {
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <div>
-                          <p className="font-semibold">
-                            {document.fr.name}
-                          </p>
+                          <p className="font-semibold">{document.fr.name}</p>
                         </div>
                       </div>
                     </TableCell>

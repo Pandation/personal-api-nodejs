@@ -11,35 +11,22 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
   Input,
   Label,
   Button,
   Pagination,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon } from "../../icons";
-
-import response from "../../utils/demo/tableData";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Educations } from "../../redux/features/portfolio/educations";
+import { educationsSchema } from "../../configs/modelSchemas";
 
-const initialSchema = {
-  jobTitle: "",
-  society: "",
-  place: "",
-  date: "",
-};
-
-const initialState = {
-  en: { ...initialSchema },
-  fr: { ...initialSchema },
-};
 function EducationsPage() {
   const dispatch = useDispatch();
   const collection = useSelector((state) => state.educations.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(initialState);
+  const [formValues, setFormValues] = useState(educationsSchema);
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -62,7 +49,7 @@ function EducationsPage() {
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+        [language]: { ...formValues[language], [e.target.name]: e.target.value },
       });
   };
 
@@ -109,20 +96,20 @@ function EducationsPage() {
               <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <SectionTitle>Français</SectionTitle>
                 <Label>
-                  <span>Expérience</span>
+                  <span>Title</span>
                   <Input
-                    name="jobTitle"
+                    name="title"
                     className="mt-1"
-                    placeholder="Développeur FullStack"
+                    placeholder="Développeur Web et Web Mobile"
                     onChange={updateValues("fr")}
                   />
                 </Label>
                 <Label>
-                  <span>Société</span>
+                  <span>School</span>
                   <Input
-                    name="society"
+                    name="school"
                     className="mt-1"
-                    placeholder="SuperStartup"
+                    placeholder="Super School"
                     onChange={updateValues("fr")}
                   />
                 </Label>
@@ -149,20 +136,20 @@ function EducationsPage() {
               <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <SectionTitle>English</SectionTitle>
                 <Label>
-                  <span>Education</span>
+                  <span>Title</span>
                   <Input
-                    name="jobTitle"
+                    name="title"
                     className="mt-1"
-                    placeholder="FullStack Developer"
+                    placeholder="Développeur Web et Web Mobile"
                     onChange={updateValues("en")}
                   />
                 </Label>
                 <Label>
-                  <span>Society</span>
+                  <span>School</span>
                   <Input
-                    name="society"
+                    name="school"
                     className="mt-1"
-                    placeholder="SuperStartup"
+                    placeholder="Super School"
                     onChange={updateValues("en")}
                   />
                 </Label>
@@ -203,8 +190,8 @@ function EducationsPage() {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>Education</TableCell>
-                <TableCell>Society</TableCell>
+                <TableCell>Title</TableCell>
+                <TableCell>School</TableCell>
                 <TableCell>Place</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Actions</TableCell>
@@ -212,19 +199,20 @@ function EducationsPage() {
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
+                console.log(document)
                 return (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <div>
                           <p className="font-semibold">
-                            {document.fr.jobTitle}
+                            {document.fr.title}
                           </p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {document.fr.society}</span>
+                      <span className="text-sm">{document.fr.school}</span>
                     </TableCell>
                     <TableCell>{document.fr.place}</TableCell>
                     <TableCell>

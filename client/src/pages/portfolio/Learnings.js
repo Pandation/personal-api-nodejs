@@ -24,22 +24,13 @@ import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Learnings } from "../../redux/features/portfolio/learnings";
 
-const initialSchema = {
-  jobTitle: "",
-  society: "",
-  place: "",
-  date: "",
-};
+import { learningsSchema } from "../../configs/modelSchemas";
 
-const initialState = {
-  en: { ...initialSchema },
-  fr: { ...initialSchema },
-};
 function LearningsPage() {
   const dispatch = useDispatch();
   const collection = useSelector((state) => state.learnings.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(initialState);
+  const [formValues, setFormValues] = useState(learningsSchema);
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -58,11 +49,10 @@ function LearningsPage() {
   function onPageChangeTable(p) {
     setPageTable(p);
   }
-  const updateValues = (language) => {
+  const updateValues = () => {
     return (e) =>
       setFormValues({
-        ...formValues,
-        [language]: { ...formValues.en, [e.target.name]: e.target.value },
+        [e.target.name]: e.target.value,
       });
   };
 
@@ -105,83 +95,14 @@ function LearningsPage() {
         </Button>
         {isFormOpen && (
           <div className="flex flex-col">
-            <div className="flex">
+            <div className="flex-col">
               <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <SectionTitle>Français</SectionTitle>
-                <Label>
-                  <span>Expérience</span>
-                  <Input
-                    name="jobTitle"
-                    className="mt-1"
-                    placeholder="Développeur FullStack"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-                <Label>
-                  <span>Société</span>
-                  <Input
-                    name="society"
-                    className="mt-1"
-                    placeholder="SuperStartup"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-
-                <Label>
-                  <span>Lieu</span>
-                  <Input
-                    name="place"
-                    className="mt-1"
-                    placeholder="Montpellier 34"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-                <Label>
-                  <span>Date</span>
-                  <Input
-                    name="date"
-                    className="mt-1"
-                    placeholder="Novembre 2021"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-              </div>
-              <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <SectionTitle>English</SectionTitle>
                 <Label>
                   <span>Learning</span>
                   <Input
-                    name="jobTitle"
+                    name="name"
                     className="mt-1"
-                    placeholder="FullStack Developer"
-                    onChange={updateValues("en")}
-                  />
-                </Label>
-                <Label>
-                  <span>Society</span>
-                  <Input
-                    name="society"
-                    className="mt-1"
-                    placeholder="SuperStartup"
-                    onChange={updateValues("en")}
-                  />
-                </Label>
-
-                <Label>
-                  <span>Place</span>
-                  <Input
-                    name="place"
-                    className="mt-1"
-                    placeholder="Montpellier 34"
-                    onChange={updateValues("en")}
-                  />
-                </Label>
-                <Label>
-                  <span>Date</span>
-                  <Input
-                    name="date"
-                    className="mt-1"
-                    placeholder="November 2021"
+                    placeholder="TypeScript"
                     onChange={updateValues("en")}
                   />
                 </Label>
@@ -203,32 +124,21 @@ function LearningsPage() {
           <Table>
             <TableHeader>
               <tr>
-                <TableCell>Learning</TableCell>
-                <TableCell>Society</TableCell>
-                <TableCell>Place</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell>Name</TableCell>
                 <TableCell>Actions</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
+                console.log(document);
                 return (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <div>
-                          <p className="font-semibold">
-                            {document.fr.jobTitle}
-                          </p>
+                          <p className="font-semibold">{document.name}</p>
                         </div>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">$ {document.fr.society}</span>
-                    </TableCell>
-                    <TableCell>{document.fr.place}</TableCell>
-                    <TableCell>
-                      <span className="text-sm">{document.fr.date}</span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-4">

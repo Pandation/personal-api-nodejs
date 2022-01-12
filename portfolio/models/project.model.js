@@ -10,15 +10,19 @@ const dataSchema = new Schema({
     type: String,
     required: true,
   },
-  url: {
-    type: String,
-    default: "",
-  },
 });
 
 const projectSchema = new Schema({
   en: dataSchema,
   fr: dataSchema,
+  url: {
+    type: String,
+    default: "",
+  },
+  imageUrl: {
+    type: String,
+    default: "",
+  },
 });
 
 const ProjectModel = mongoose.model("project", projectSchema);

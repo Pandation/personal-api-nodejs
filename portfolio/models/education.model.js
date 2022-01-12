@@ -18,6 +18,7 @@ const dataSchema = new Schema({
     type: String,
   },
 });
+
 const educationSchema = new Schema({
   en: dataSchema,
   fr: dataSchema,
