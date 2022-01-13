@@ -16,7 +16,7 @@ app.use(
     origin: "*",
     credentials: true,
   })
-);
+);+
 
 app.use(express.json());
 app.use(cookieParser());
