@@ -26,7 +26,8 @@ app.use(express.static("./public/uploads/"));
 
 //REACT APP ADMIN OFFICE
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/client/build/index.html");
+  // res.sendFile(__dirname + "/client/build/index.html");
+  res.send({ response: "hello" });
 });
 
 //API
