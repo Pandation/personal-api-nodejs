@@ -21,12 +21,12 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static("./client/build/"));
-app.use(express.static("./public/uploads/"));
+app.use(express.static(path.join(__dirname,"./client/build/")));
+app.use(express.static(path.join(__dirname,"./public/uploads/")));
 
 //REACT APP ADMIN OFFICE
 app.get("/", (req, res) => {
-  res.sendFile("/client/build/index.html");
+  res.sendFile(path.join(__dirname,"/client/build/index.html"));
   // res.send({ response: "hello", url: __dirname + "/client/build/index.html" });
 });
 
