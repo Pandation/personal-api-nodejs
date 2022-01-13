@@ -13,7 +13,7 @@ const port = 5000;
 // //cors
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     credentials: true,
   })
 );
