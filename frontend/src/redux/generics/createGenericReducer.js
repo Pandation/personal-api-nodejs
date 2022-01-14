@@ -3,7 +3,7 @@ import getAllGeneric from "./getAll";
 import deleteItemGeneric from "./deleteItem";
 
 function createGenericReducer(type) {
-  const url = `http://localhost:5000/api/portfolio/${type}`;
+  const url = `/api/portfolio/${type}`;
   const getAll = getAllGeneric(type, url);
   const create = createGeneric(type, url);
   const deleteItem = deleteItemGeneric(type, url);

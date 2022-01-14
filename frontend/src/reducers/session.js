@@ -76,7 +76,7 @@ const middleware = (dispatch) => (action) => {
   switch (action.type) {
     case AUTH.LOGOUT:
       dispatch({ type: AUTH.FETCHING_LOGOUT });
-      fetch("http://localhost:5000/api/auth/logout", {
+      fetch("/api/auth/logout", {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -87,7 +87,7 @@ const middleware = (dispatch) => (action) => {
         .catch((err) => console.log(err));
       break;
     case AUTH.LOGIN:
-      fetch("http://localhost:5000/api/auth/login", {
+      fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -107,7 +107,7 @@ const middleware = (dispatch) => (action) => {
       break;
     case AUTH.GET_ADMIN:
       dispatch({ type: AUTH.TRY_LOGIN });
-      fetch("http://localhost:5000/api/auth/user", {
+      fetch("/api/auth/user", {
         credentials: "include",
       })
         .then((res) => res.json())

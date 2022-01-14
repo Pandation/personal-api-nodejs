@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const url = "http://localhost:5000/api/portfolio/experiences";
+const url = "/api/portfolio/experiences";
 export const getTest = createAsyncThunk(
   "experiences/getAll",
   async (dispatch, getState) => {

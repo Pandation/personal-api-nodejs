@@ -4,7 +4,7 @@ import createGenericReducer from "../../generics/createGenericReducer";
 const type = "projects";
 const projects = createGenericReducer(type);
 
-const url = `http://localhost:5000/api/portfolio/${type}`;
+const url = `/api/portfolio/${type}`;
 
 const projectsSlice = createSlice({
   name: "projects",
