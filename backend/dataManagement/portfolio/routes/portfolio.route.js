@@ -5,7 +5,6 @@ const projectsController = require("../controllers/projects.controller");
 const experiencesController = require("../controllers/experiences.controller");
 const skillsController = require("../controllers/skills.controller");
 const educationsController = require("../controllers/educations.controller");
-const path = require('path');
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -50,11 +49,5 @@ router.post("/projects/upload", upload.single('file'), projectsController.upload
 router.post("/projects", upload.single('file'), projectsController.create);
 router.delete("/projects/:id", projectsController.delete);
 router.put("/projects/:id", projectsController.update);
-
-
-//CRUD EDUCATION
-//CRUD PROJECTS
-//CRUD SKILLS
-//CRUD LEARNINGS
 
 module.exports = router;

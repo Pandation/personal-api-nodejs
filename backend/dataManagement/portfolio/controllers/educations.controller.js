@@ -3,7 +3,8 @@ const EducationModel = require("../models/education.model");
 module.exports.getAll = async (_, res) => {
   const data = await EducationModel.find();
 
-  if (!data[0]) return res.json({ data: [], message: "No documents were found." });
+  if (!data[0])
+    return res.json({ data: [], message: "No documents were found." });
   return res.send({ data });
 };
 
