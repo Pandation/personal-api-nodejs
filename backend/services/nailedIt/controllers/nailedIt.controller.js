@@ -6,7 +6,7 @@ module.exports.getAll = async (req,res) => {
         let results = await data.json()
         console.log(results)
         res.status(200).send({message: 'test'})
-    } catch () {
+    } catch (err) {
 
     }
 }
