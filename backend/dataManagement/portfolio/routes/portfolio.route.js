@@ -5,6 +5,8 @@ const projectsController = require("../controllers/projects.controller");
 const experiencesController = require("../controllers/experiences.controller");
 const skillsController = require("../controllers/skills.controller");
 const educationsController = require("../controllers/educations.controller");
+const portfolioController = require("../controllers/portfolio.controller");
+const path = require('path');
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -18,6 +20,9 @@ const storage = multer.diskStorage({
   })
   
   const upload = multer({ storage: storage })
+
+///ALLDATA
+router.get("/config", portfolioController.getAll);
 
 //CRUD EXPERIENCE
 router.get("/experiences", experiencesController.getAll);
