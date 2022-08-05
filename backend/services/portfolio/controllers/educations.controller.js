@@ -1,20 +1,10 @@
 const EducationModel = require("../models/education.model");
+const getAllGeneric = require("../../generics/getAll")
+const createGeneric = require("../../generics/create")
 
-module.exports.getAll = async (_, res) => {
-  const data = await EducationModel.find();
+module.exports.getAll = getAllGeneric(EducationModel);
 
-  if (!data[0])
-    return res.json({ data: [], message: "No documents were found." });
-  return res.send({ data });
-};
-
-module.exports.create = async (req, res) => {
-  const { en, fr } = req.body;
-  EducationModel.create({ en, fr }, (err, docs) => {
-    if (err) return res.json({ err });
-    return res.send({ data: docs });
-  });
-};
+module.exports.create = createGeneric(EducationModel)
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;

@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
+import { Redirect } from "react-router-dom";
+
 import { SessionContext } from "../reducers/session";
 import { AUTH } from "../reducers/session";
-import { Redirect } from "react-router-dom";
+import ThemedSuspense from "../components/ThemedSuspense";
 
 const withAuth = (Component) => (props) => {
   const { session, dispatch } = React.useContext(SessionContext);
@@ -17,7 +19,7 @@ const withAuth = (Component) => (props) => {
   }
 
   if (session.fetching) {
-    return <p>Chargement</p>;
+    return <ThemedSuspense />;
   }
 
   return <>{session.loggedIn && <Component {...props} />}</>;

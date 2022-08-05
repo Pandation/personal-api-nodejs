@@ -1,17 +1,12 @@
 const ProjectModel = require("../models/project.model");
+const getAllGeneric = require("../../generics/getAll");
 
-module.exports.getAll = async (_, res) => {
-  const data = await ProjectModel.find();
-
-  if (!data[0])
-    return res.json({ data: [], message: "No documents were found." });
-  return res.send({ data });
-};
+module.exports.getAll = getAllGeneric(ProjectModel);
 
 module.exports.create = async (req, res) => {
   const { en, fr, url } = req.body;
-  console.log({ url: req.body.url});
-  console.log({ en: req.body.en});
+  console.log({ url: req.body.url });
+  console.log({ en: req.body.en });
   // ProjectModel.create(
   //   {
   //     en,
@@ -24,7 +19,7 @@ module.exports.create = async (req, res) => {
   //     return res.send({ data: docs });
   //   }
   // );
-  res.json({ok:"ok"})
+  res.json({ ok: "ok" });
 };
 
 module.exports.upload = async (req, res) => {

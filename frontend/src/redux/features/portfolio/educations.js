@@ -1,31 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import createGenericReducer from "../../generics/createGenericReducer";
+import createGenericSlice from "../../generics/createGenericSlice";
 
-const educations = createGenericReducer("educations");
-
-const educationsSlice = createSlice({
-  name: "educations",
-  initialState: {
-    delete: {
-      fetching: false,
-      loaded: false,
-      error: "",
-    },
-    collection: {
-      items: [],
-      error: "",
-      fetching: false,
-      loaded: false,
-    },
-  },
-  extraReducers: {
-    ...educations.reducers,
-  },
-});
+const educationsSlice = createGenericSlice("educations", "/api/portfolio");
 
 export const Educations = {
   ...educationsSlice.actions,
-  ...educations.actions,
 };
-export default educationsSlice.reducer;
 
+export default educationsSlice.reducers;

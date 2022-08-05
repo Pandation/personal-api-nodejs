@@ -69,6 +69,30 @@ const routes = [
       },
     ],
   },
+  {
+    icon: 'MailIcon',
+    name: 'Nailed It',
+    // path: "/portfolio",
+    routes: [
+      // submenu
+      {
+        path: '/ni/sendingConfigs',
+        name: 'Sending Configurations',
+      },
+      {
+        path: '/ni/companies',
+        name: 'Companies',
+      },
+      {
+        path: '/ni/emailTemplates',
+        name: 'Email Templates',
+      },
+      {
+        path: '/ni/processes',
+        name: 'Processes',
+      },
+    ],
+  },
 ]
 
 export default routes

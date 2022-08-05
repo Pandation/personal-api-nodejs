@@ -4,7 +4,12 @@ import skillsReducer from "./features/portfolio/skills";
 import projectsReducer from "./features/portfolio/projects";
 import learningsReducer from "./features/portfolio/learnings";
 import educationsReducer from "./features/portfolio/educations";
-import testReducer from "./features/portfolio/test";
+import companiesReducer from "./features/nailedIt/companies";
+// import sendingConfigsReducer from "./features/nailedIt/sendingConfigs";
+// import processesReducer from "./features/nailedIt/processes";
+// import emailTemplatesReducer from "./features/nailedIt/emailTemplates";
+
+// import testReducer from "./features/portfolio/test";
 
 export default configureStore({
   reducer: {
@@ -13,6 +18,10 @@ export default configureStore({
     skills: skillsReducer,
     projects: projectsReducer,
     educations: educationsReducer,
+    companies: companiesReducer,
+    // sendingConfigs: sendingConfigsReducer,
+    // processes: processesReducer,
+    // emailTemplates: emailTemplatesReducer,
     // test : testReducer
   }
 });

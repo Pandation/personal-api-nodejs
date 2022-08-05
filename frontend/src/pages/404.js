@@ -14,14 +14,13 @@ function Page404() {
         404
       </h1>
       <p className="text-gray-700 dark:text-gray-300">
-        Page introuvable. 
+        Page introuvable.{"   "}
         <Link
           className="text-purple-600 hover:underline dark:text-purple-300"
-          to="../index.html"
+          to="/"
         >
           Revenir en arrière
         </Link>
-        .
       </p>
     </div>
   );

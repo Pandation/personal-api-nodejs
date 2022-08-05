@@ -1,20 +1,10 @@
 const LearningModel = require("../models/learning.model");
+const getAllGeneric = require("../../generics/getAll");
+const createGeneric = require("../../generics/create");
 
-module.exports.getAll = async (_, res) => {
-  const data = await LearningModel.find();
+module.exports.getAll = getAllGeneric(LearningModel);
 
-  if (!data[0])
-    return res.json({ data: [], message: "No documents were found." });
-  return res.send({ data });
-};
-
-module.exports.create = async (req, res) => {
-  const { name } = req.body;
-  LearningModel.create({ name }, (err, docs) => {
-    if (err) return res.json({ err });
-    return res.send({ data: docs });
-  });
-};
+module.exports.create = createGeneric(LearningModel);
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;

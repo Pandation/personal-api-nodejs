@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -19,22 +19,32 @@ import {
 import { EditIcon, TrashIcon } from "../../icons";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
-import { Projects } from "../../redux/features/portfolio/projects";
+import { Companies } from "../../redux/features/nailedIt/companies";
+//TODO: UPDATE
+import { companiesSchema } from "../../configs/modelSchemas";
 
-import { projectsSchema } from "../../configs/modelSchemas";
-
-function ProjectsPage() {
+function checkData(data) {
+  let valid = true;
+  for (const key in data) {
+    if (data[key] === "") {
+      valid = false;
+    }
+  }
+  return valid;
+}
+function CompaniesPage() {
   const dispatch = useDispatch();
-  const [formValues, setFormValues] = useState(projectsSchema);
-  const collection = useSelector((state) => state.projects.collection);
+  const collection = useSelector((state) => state.companies.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [formValues, setFormValues] = useState(companiesSchema);
+
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
   // setup data for every table
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
-    dispatch(Projects.getAll());
+    dispatch(Companies.getAll());
   }, [dispatch]);
 
   // pagination setup
@@ -45,47 +55,27 @@ function ProjectsPage() {
   function onPageChangeTable(p) {
     setPageTable(p);
   }
-  const updateValues = (language = false) => {
-    if (!language) {
-      return (e) => setFormValues({ ...formValues, url: e.target.value });
-    }
-    return (e) =>
-      setFormValues({
-        ...formValues,
-        [language]: {
-          ...formValues[language],
-          [e.target.name]: e.target.value,
-        },
-      });
-  };
-  const updateUpload = (e) => {
-    const file = e.target.files[0];
-    setFormValues({ ...formValues, file });
+
+  const updateValues = (e) => {
+    setFormValues({
+      ...formValues,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const deleteItem = (id) => {
     return () => {
-      dispatch(Projects.deleteItem(id));
+      dispatch(Companies.deleteItem(id));
     };
   };
+
   const save = () => {
-    const FORM_DATA = new FormData();
-    for (const formKey in formValues) {
-      if (formKey === "en" || formKey === "fr") {
-        let data = {};
-        for (const key in formValues[formKey]) {
-          if (formValues[formKey][key] === "" || undefined) {
-            return;
-          }
-          data[key] = formValues[formKey][key];
-          FORM_DATA.append(key, JSON.stringify(data));
-        }
-      } else if (formKey === "url") {
-        FORM_DATA.append(formKey, formValues[formKey]);
-      }
+    if(!checkData(formValues)) {
+        return;
     }
-    dispatch(Projects.upload(FORM_DATA));
+    dispatch(Companies.create(formValues));
   };
+
   useEffect(() => {
     if (collection.items.length > 0) {
       setDataTable(
@@ -99,7 +89,7 @@ function ProjectsPage() {
 
   return (
     <>
-      <PageTitle>Projects</PageTitle>
+      <PageTitle>Companies</PageTitle>
       <div>
         <Button
           className="mb-5"
@@ -109,79 +99,58 @@ function ProjectsPage() {
           {isFormOpen ? "Fermer" : "Ajouter"}
         </Button>
         {isFormOpen && (
-          <div className="flex flex-col px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <div className="flex">
-              <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <div className="flex flex-col">
+            <div>
+              <div className="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
                 <SectionTitle>Français</SectionTitle>
                 <Label>
                   <span>Name</span>
+                  <Input name="name" className="mt-1" onChange={updateValues} />
+                </Label>
+                <Label>
+                  <span>Address</span>
                   <Input
-                    name="name"
+                    name="address"
                     className="mt-1"
-                    placeholder="Crazy Party"
-                    onChange={updateValues("fr")}
+                    onChange={updateValues}
+                  />
+                </Label>
+
+                <Label>
+                  <span>Email</span>
+                  <Input
+                    name="email"
+                    className="mt-1"
+                    type="email"
+                    onChange={updateValues}
                   />
                 </Label>
                 <Label>
-                  <span>Stacks</span>
+                  <span>Contact Gender</span>
                   <Input
-                    name="stacks"
+                    name="contactGender"
                     className="mt-1"
-                    placeholder="Stacks"
-                    onChange={updateValues("fr")}
+                    onChange={updateValues}
                   />
                 </Label>
                 <Label>
-                  <span>Date</span>
+                  <span>Contact Firstname</span>
                   <Input
-                    name="date"
+                    name="contactFirstname"
                     className="mt-1"
-                    placeholder="Novembre 2021"
-                    onChange={updateValues("fr")}
-                  />
-                </Label>
-              </div>
-              <div className="flex-1 px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <SectionTitle>English</SectionTitle>
-                <Label>
-                  <span>Name</span>
-                  <Input
-                    name="name"
-                    className="mt-1"
-                    placeholder="Crazy Party"
-                    onChange={updateValues("en")}
+                    onChange={updateValues}
                   />
                 </Label>
                 <Label>
-                  <span>Stacks</span>
+                  <span>Contact Lastname</span>
                   <Input
-                    name="stacks"
+                    name="contactLastname"
                     className="mt-1"
-                    placeholder="Stacks"
-                    onChange={updateValues("en")}
-                  />
-                </Label>
-                <Label>
-                  <span>Date</span>
-                  <Input
-                    name="date"
-                    className="mt-1"
-                    placeholder="Novembre 2021"
-                    onChange={updateValues("en")}
+                    onChange={updateValues}
                   />
                 </Label>
               </div>
             </div>
-            <Label>
-              <span>Image</span>
-              {/* <Input
-                name="url"
-                className="mt-1"
-                placeholder="Montpellier 34"
-                onChange={updateValues()}
-              /> */}
-              <input type="file" onChange={updateUpload} name="file" />
-            </Label>
             <Button
               className="mb-5 self-end"
               iconLeft={EditIcon}
@@ -199,32 +168,42 @@ function ProjectsPage() {
             <TableHeader>
               <tr>
                 <TableCell>Name</TableCell>
-                <TableCell>Stacks</TableCell>
-                <TableCell>Date</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Contact Gender</TableCell>
+                <TableCell>Contact Name</TableCell>
                 <TableCell>Actions</TableCell>
               </tr>
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
+                if (!document) return null;
                 return (
                   <TableRow key={i}>
                     <TableCell>
                       <div className="flex items-center text-sm">
                         <div>
-                          <p className="font-semibold">{document.fr.name}</p>
+                          <p className="font-semibold">{document.name}</p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm">$ {document.fr.society}</span>
+                      <span className="text-sm">{document.address}</span>
                     </TableCell>
-                    <TableCell>{document.fr.stacks}</TableCell>
+                    <TableCell>{document.email}</TableCell>
                     <TableCell>
-                      <span className="text-sm">{document.fr.date}</span>
+                      <span className="text-sm">{document.contactGender}</span>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm">
+                        {document.contactFirstname +
+                          " " +
+                          document.contactLastname}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-4">
-                        <Link to={`/pf/projects/${document._id}`}>
+                        <Link to={`ni/companies/${document._id}`}>
                           <Button layout="link" size="icon" aria-label="Edit">
                             <EditIcon className="w-5 h-5" aria-hidden="true" />
                           </Button>
@@ -258,4 +237,4 @@ function ProjectsPage() {
   );
 }
 
-export default ProjectsPage;
+export default CompaniesPage;

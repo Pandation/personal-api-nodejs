@@ -32,3 +32,13 @@ export const projectsSchema = {
 function bothLanguage(schema) {
   return { en: { ...schema }, fr: { ...schema } };
 }
+
+//NAILED IT
+export const companiesSchema = {
+  name: "",
+  address: "",
+  email: "",
+  contactGender: "",
+  contactLastname: "",
+  contactFirstname: "",
+};

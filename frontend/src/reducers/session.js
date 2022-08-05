@@ -9,7 +9,7 @@ export const AUTH = {
   LOGOUT: "AUTH-LOGOUT",
   FETCHING_LOGOUT: "AUTH-FETCHING_LOGOUT",
   LOADED_LOGOUT: "AUTH-LOADED_LOGOUT",
-  FETCHING_TOKEN: "AUTH-FETCHING_TOKEN"
+  FETCHING_TOKEN: "AUTH-FETCHING_TOKEN",
 };
 
 export const SessionContext = React.createContext({});
@@ -60,23 +60,28 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         loggedIn: false,
-        user: {}
+        user: {},
       };
     case AUTH.FETCHING_TOKEN:
       return {
-        ...state, 
+        ...state,
         loaded: false,
-      }
+      };
     default:
       break;
   }
 };
 
 const middleware = (dispatch) => (action) => {
+  let baseUrl = "";
+
+  if (window.location.origin === "http://localhost:3000") {
+    baseUrl = "http://localhost:5000";
+  }
   switch (action.type) {
     case AUTH.LOGOUT:
       dispatch({ type: AUTH.FETCHING_LOGOUT });
-      fetch("/api/auth/logout", {
+      fetch(baseUrl + "/api/auth/logout", {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -87,7 +92,7 @@ const middleware = (dispatch) => (action) => {
         .catch((err) => console.log(err));
       break;
     case AUTH.LOGIN:
-      fetch("/api/auth/login", {
+      fetch(baseUrl + "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -107,7 +112,7 @@ const middleware = (dispatch) => (action) => {
       break;
     case AUTH.GET_ADMIN:
       dispatch({ type: AUTH.TRY_LOGIN });
-      fetch("/api/auth/user", {
+      fetch(baseUrl + "/api/auth/user", {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -132,13 +137,15 @@ const SessionProvider = ({ children }) => {
   const [session, dispatch] = React.useReducer(reducer, initialState);
   const _dispatch = middleware(dispatch);
   const logout = () => {
-    _dispatch({ type: AUTH.LOGOUT});
-  }
+    _dispatch({ type: AUTH.LOGOUT });
+  };
   const login = (credentials) => {
     _dispatch({ type: AUTH.LOGIN, payload: credentials });
-  }
+  };
   return (
-    <SessionContext.Provider value={{session, dispatch : _dispatch, logout, login}}>
+    <SessionContext.Provider
+      value={{ session, dispatch: _dispatch, logout, login }}
+    >
       {children}
     </SessionContext.Provider>
   );

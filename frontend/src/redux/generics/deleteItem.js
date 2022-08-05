@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const deleteItem = (type, url) =>
   createAsyncThunk(`${type}/delete`, async (id, callback = "") => {
-    const data = await fetch(url + "/" + id, {
+    const data = await fetch(url + "/" + type + "/" + id, {
       method: "DELETE",
     });
     return await data.json();

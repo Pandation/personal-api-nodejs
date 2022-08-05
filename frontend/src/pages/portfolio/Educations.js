@@ -199,7 +199,6 @@ function EducationsPage() {
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
-                console.log(document)
                 return (
                   <TableRow key={i}>
                     <TableCell>

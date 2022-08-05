@@ -2,11 +2,14 @@ import createGeneric from "./create";
 import getAllGeneric from "./getAll";
 import deleteItemGeneric from "./deleteItem";
 
-function createGenericReducer(type) {
-  const url = `/api/portfolio/${type}`;
-  const getAll = getAllGeneric(type, url);
-  const create = createGeneric(type, url);
-  const deleteItem = deleteItemGeneric(type, url);
+let baseUrl =
+  process.env.NODE_ENV === "production" ? "" : process.env.REACT_APP_API_URL;
+
+function createGenericReducer(type, url) {
+  const apiUrl = baseUrl + url;
+  const getAll = getAllGeneric(type, apiUrl);
+  const create = createGeneric(type, apiUrl);
+  const deleteItem = deleteItemGeneric(type, apiUrl);
 
   const pending = (key) => (state) => {
     state[key].fetching = true;
@@ -17,9 +20,10 @@ function createGenericReducer(type) {
     state.collection.items = action.payload.data;
   };
   const resolveCreate = (state, action) => {
+    console.log(action.payload)
     state.collection.fetching = false;
     state.collection.loaded = true;
-    state.collection.items = state.collection.items.concat(action.payload.data);
+    state.collection.items = state.collection.items.concat(action.payload);
   };
   const resolveDelete = (state, action) => {
     let newItems = state.collection.items.filter((item) => {
@@ -30,7 +34,7 @@ function createGenericReducer(type) {
   const rejected = (key) => (state, action) => {
     state[key].fetching = false;
     state[key].loaded = true;
-    state[key].error = action.payload.data;
+    state[key].error = action.payload;
   };
 
   return {

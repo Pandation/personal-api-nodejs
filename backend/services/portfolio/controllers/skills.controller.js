@@ -1,20 +1,10 @@
 const SkillModel = require("../models/skill.model");
+const getAllGeneric = require("../../generics/getAll");
+const createGeneric = require("../../generics/create");
 
-module.exports.getAll = async (_, res) => {
-  const data = await SkillModel.find();
+module.exports.getAll = getAllGeneric(SkillModel);
 
-  if (!data[0])
-    return res.json({ data: [], message: "No documents were found." });
-  return res.send({ data });
-};
-
-module.exports.create = async (req, res) => {
-  const { en, fr } = req.body;
-  SkillModel.create({ en, fr }, (err, docs) => {
-    if (err) return res.json({ err });
-    return res.send({ data: docs });
-  });
-};
+module.exports.create = createGeneric(SkillModel);
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;

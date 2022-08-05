@@ -11,16 +11,12 @@ import {
   TableRow,
   TableFooter,
   TableContainer,
-  Badge,
   Input,
   Label,
   Button,
   Pagination,
 } from "@windmill/react-ui";
 import { EditIcon, TrashIcon } from "../../icons";
-
-import response from "../../utils/demo/tableData";
-import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Learnings } from "../../redux/features/portfolio/learnings";
 
@@ -130,7 +126,6 @@ function LearningsPage() {
             </TableHeader>
             <TableBody>
               {dataTable.map((document, i) => {
-                console.log(document);
                 return (
                   <TableRow key={i}>
                     <TableCell>

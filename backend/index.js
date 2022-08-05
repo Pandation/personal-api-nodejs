@@ -18,7 +18,7 @@ const transporter = require("./configs/nodemailer").transporter;
 //cors
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "https://personal-api-nodejs.vercel.app"],
     credentials: true,
   })
 );

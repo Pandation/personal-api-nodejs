@@ -1,19 +1,10 @@
 const ExperienceModel = require("../models/experience.model");
+const createGeneric = require("../../generics/create");
+const getAllGeneric = require("../../generics/getAll");
 
-module.exports.getAll = async (_, res) => {
-  const data = await ExperienceModel.find();
+module.exports.getAll = getAllGeneric(ExperienceModel);
 
-  if (!data[0]) return res.json({ data: [], message: "No documents were found." });
-  return res.send({ data });
-};
-
-module.exports.create = async (req, res) => {
-  const { en, fr } = req.body;
-  ExperienceModel.create({ en, fr }, (err, docs) => {
-    if (err) return res.json({ err });
-    return res.send({ data: docs });
-  });
-};
+module.exports.create = createGeneric(ExperienceModel);
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
