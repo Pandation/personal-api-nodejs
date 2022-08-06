@@ -1,7 +1,7 @@
 //PORTFOLIO
 
 export const experiencesSchema = bothLanguage({
-  jobTitle: "",
+  title: "",
   society: "",
   place: "",
   date: "",
@@ -41,4 +41,21 @@ export const companiesSchema = {
   contactGender: "",
   contactLastname: "",
   contactFirstname: "",
+};
+export const processesSchema = {
+  name: "",
+};
+export const sendingConfigsSchema = {
+  company: "",
+  process: "",
+  status: "",
+  customText: "",
+  lastMailDate: "",
+  nextMailDate: "",
+};
+export const emailTemplatesSchema = {
+  name: "",
+  header: "",
+  content: "",
+  footer: "",
 };

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
-import { EditIcon, TrashIcon } from "../../icons";
+import { EditIcon } from "../../icons";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import { Input, Label, Button } from "@windmill/react-ui";
@@ -23,11 +23,11 @@ function EducationPage() {
       });
   };
 
-  const deleteItem = (id) => {
-    return () => {
-      dispatch(Educations.deleteItem(id));
-    };
-  };
+  // const deleteItem = (id) => {
+  //   return () => {
+  //     dispatch(Educations.deleteItem(id));
+  //   };
+  // };
   const save = () => {
     for (const languages in formValues) {
       for (const key in languages) {

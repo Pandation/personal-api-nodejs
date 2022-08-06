@@ -12,7 +12,7 @@ const withAuth = (Component) => (props) => {
     if (!session.loaded && !session.fetching) {
       dispatch({ type: AUTH.GET_ADMIN });
     }
-  }, [session.loaded]);
+  }, [session.loaded, session.fetching, dispatch]);
 
   if (session.loaded && !session.loggedIn) {
     return <Redirect to="/login" />;

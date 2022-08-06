@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import {
-  Table,
-  TableHeader,
-  TableCell,
-  TableBody,
-  TableRow,
-  TableFooter,
-  TableContainer,
   Input,
   Label,
   Button,
-  Pagination,
 } from "@windmill/react-ui";
-import { EditIcon, TrashIcon } from "../../icons";
+import Table from "../../components/Table";
+import { EditIcon } from "../../icons";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Educations } from "../../redux/features/portfolio/educations";
@@ -49,7 +41,10 @@ function EducationsPage() {
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues[language], [e.target.name]: e.target.value },
+        [language]: {
+          ...formValues[language],
+          [e.target.name]: e.target.value,
+        },
       });
   };
 
@@ -186,68 +181,22 @@ function EducationsPage() {
       </div>
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
-        <TableContainer className="mb-8">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>Title</TableCell>
-                <TableCell>School</TableCell>
-                <TableCell>Place</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Actions</TableCell>
-              </tr>
-            </TableHeader>
-            <TableBody>
-              {dataTable.map((document, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <div className="flex items-center text-sm">
-                        <div>
-                          <p className="font-semibold">
-                            {document.fr.title}
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm">{document.fr.school}</span>
-                    </TableCell>
-                    <TableCell>{document.fr.place}</TableCell>
-                    <TableCell>
-                      <span className="text-sm">{document.fr.date}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Link to={`/pf/educations/${document._id}`}>
-                          <Button layout="link" size="icon" aria-label="Edit">
-                            <EditIcon className="w-5 h-5" aria-hidden="true" />
-                          </Button>
-                        </Link>
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Delete"
-                          onClick={deleteItem(document._id)}
-                        >
-                          <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={resultsPerPage}
-              onChange={onPageChangeTable}
-              label="Table navigation"
-            />
-          </TableFooter>
-        </TableContainer>
+        <Table
+          columns={[
+            { name: "Title" },
+            { name: "School" },
+            { name: "Place" },
+            { name: "Date" },
+          ]}
+          data={dataTable}
+          pagination={{
+            totalResults,
+            resultsPerPage,
+            onPageChangeTable,
+          }}
+          deleteItem={deleteItem}
+          languages={true}
+        />
       )}
     </>
   );

@@ -100,7 +100,7 @@ function ExperiencesPage() {
                 <Label>
                   <span>Expérience</span>
                   <Input
-                    name="jobTitle"
+                    name="title"
                     className="mt-1"
                     placeholder="Développeur FullStack"
                     onChange={updateValues("fr")}
@@ -140,7 +140,7 @@ function ExperiencesPage() {
                 <Label>
                   <span>Experience</span>
                   <Input
-                    name="jobTitle"
+                    name="title"
                     className="mt-1"
                     placeholder="FullStack Developer"
                     onChange={updateValues("en")}
@@ -207,7 +207,7 @@ function ExperiencesPage() {
                       <div className="flex items-center text-sm">
                         <div>
                           <p className="font-semibold">
-                            {document.fr.jobTitle}
+                            {document.fr.title}
                           </p>
                         </div>
                       </div>

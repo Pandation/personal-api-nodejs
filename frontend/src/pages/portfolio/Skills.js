@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
 import PageTitle from "../../components/Typography/PageTitle";
-import {
-  Table,
-  TableHeader,
-  TableCell,
-  TableBody,
-  TableRow,
-  TableFooter,
-  TableContainer,
-  Textarea,
-  Input,
-  Label,
-  Button,
-  Pagination,
-} from "@windmill/react-ui";
-import { EditIcon, TrashIcon } from "../../icons";
+import { Textarea, Input, Label, Button } from "@windmill/react-ui";
+import { EditIcon } from "../../icons";
 
-import response from "../../utils/demo/tableData";
+import Table from "../../components/Table";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Skills } from "../../redux/features/portfolio/skills";
@@ -52,7 +38,10 @@ function SkillsPage() {
     return (e) =>
       setFormValues({
         ...formValues,
-        [language]: { ...formValues[language], [e.target.name]: e.target.value },
+        [language]: {
+          ...formValues[language],
+          [e.target.name]: e.target.value,
+        },
       });
   };
 
@@ -153,58 +142,17 @@ function SkillsPage() {
       </div>
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
-        <TableContainer className="mb-8">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>Name</TableCell>
-                <TableCell>Text</TableCell>
-                <TableCell>Actions</TableCell>
-              </tr>
-            </TableHeader>
-            <TableBody>
-              {dataTable.map((document, i) => {
-                return (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <div className="flex items-center text-sm">
-                        <div>
-                          <p className="font-semibold">{document.fr.name}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{document.fr.text}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-4">
-                        <Link to={`/pf/skills/${document._id}`}>
-                          <Button layout="link" size="icon" aria-label="Edit">
-                            <EditIcon className="w-5 h-5" aria-hidden="true" />
-                          </Button>
-                        </Link>
-                        <Button
-                          layout="link"
-                          size="icon"
-                          aria-label="Delete"
-                          onClick={deleteItem(document._id)}
-                        >
-                          <TrashIcon className="w-5 h-5" aria-hidden="true" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={resultsPerPage}
-              onChange={onPageChangeTable}
-              label="Table navigation"
-            />
-          </TableFooter>
-        </TableContainer>
+        <Table
+          columns={[{ name: "Name" }, { name: "Text" }]}
+          data={dataTable}
+          pagination={{
+            totalResults,
+            resultsPerPage,
+            onPageChangeTable,
+          }}
+          deleteItem={deleteItem}
+          languages={true}
+        />
       )}
     </>
   );

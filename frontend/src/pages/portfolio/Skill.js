@@ -22,11 +22,11 @@ function SkillPage() {
       });
   };
 
-  const deleteItem = (id) => {
-    return () => {
-      dispatch(Skills.deleteItem(id));
-    };
-  };
+  // const deleteItem = (id) => {
+  //   return () => {
+  //     dispatch(Skills.deleteItem(id));
+  //   };
+  // };
   const save = () => {
     for (const languages in formValues) {
       for (const key in languages) {

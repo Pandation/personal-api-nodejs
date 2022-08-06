@@ -135,7 +135,7 @@ const middleware = (dispatch) => (action) => {
 
 const SessionProvider = ({ children }) => {
   const [session, dispatch] = React.useReducer(reducer, initialState);
-  const _dispatch = middleware(dispatch);
+  const _dispatch = React.useCallback(middleware(dispatch), [dispatch]);
   const logout = () => {
     _dispatch({ type: AUTH.LOGOUT });
   };
