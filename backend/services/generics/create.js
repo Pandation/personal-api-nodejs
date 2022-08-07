@@ -3,7 +3,6 @@ module.exports = (model, options = {}) => async (req, res) => {
     let document = req.body;
     let newDoc = await model.create(document);
 
-    console.log(newDoc)
     if (typeof options.populate !== "undefined") {
       await Promise.all(
         Object.keys(options.populate).map(async (key) => {
@@ -16,7 +15,6 @@ module.exports = (model, options = {}) => async (req, res) => {
 
     return res.status(201).send(newDoc);
   } catch (err) {
-    console.log(err)
     res.status(500).send({ error : err, message: 'Il y a eu une erreur dans la création.'});
   }
 };

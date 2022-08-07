@@ -16,9 +16,6 @@ module.exports.getAll = async (_, res) => {
     learnings,
     skills,
   };
-  // const data = await EducationModel.find();
-
-  console.log(datas);
 
   if (!datas)
     return res.json({ data: [], message: "No documents were found." });

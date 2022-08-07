@@ -70,7 +70,6 @@ let nailedIt = cron.job(
     );
 
     mailsInfo = mailsInfo.filter((info) => info !== null);
-    console.log(mailsInfo);
 
     let logs = mailsInfoToLogs(mailsInfo);
     transporter.sendMail({
