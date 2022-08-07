@@ -11,7 +11,7 @@ function createGenericReducer(type, url) {
   const create = createGeneric(type, apiUrl);
   const deleteItem = deleteItemGeneric(type, apiUrl);
 
-  const pending = (key) => (state) => {
+  const pending = (key) => (state,action) => {
     state[key].fetching = true;
   };
   const resolveGetAll = (state, action) => {
@@ -20,7 +20,6 @@ function createGenericReducer(type, url) {
     state.collection.items = action.payload.data;
   };
   const resolveCreate = (state, action) => {
-    console.log(action.payload)
     state.collection.fetching = false;
     state.collection.loaded = true;
     state.collection.items = state.collection.items.concat(action.payload);

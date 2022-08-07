@@ -17,6 +17,8 @@ const companySchema = new Schema({
   },
   contactGender: {
     type: String,
+    enum: ['0','1','2'],
+    default: '0'
   },
   contactLastname: {
     type: String,

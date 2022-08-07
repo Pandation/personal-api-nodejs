@@ -17,6 +17,17 @@ const emailTemplateSchema = new Schema({
     type: String,
     required: true,
   },
+  process: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "process",
+  },
+  status: {
+    type: String,
+  },
+  subject: {
+    type: String,
+    required: true,
+  },
 });
 
 const EmailTemplateModel = mongoose.model("emailTemplate", emailTemplateSchema);

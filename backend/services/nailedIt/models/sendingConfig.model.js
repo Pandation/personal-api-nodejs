@@ -23,6 +23,10 @@ const sendingConfigSchema = new mongoose.Schema({
   nextMailDate: {
     type: Date,
   },
+  enabled: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 module.exports = mongoose.model("sendingConfig", sendingConfigSchema);

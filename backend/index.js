@@ -7,13 +7,11 @@ const cors = require("cors");
 require("dotenv").config();
 require("./configs/db");
 
+const configController = require("./services/config.controller")
 const port = 5000;
 
-//cron
+//cron jobs
 require("./configs/cronJobs");
-
-//nodemailer
-const transporter = require("./configs/nodemailer").transporter;
 
 //cors
 app.use(
@@ -31,6 +29,9 @@ app.use(express.static("/files/"));
 //API
 const authRoutes = require("./authentication/routes/auth.route");
 app.use("/api/auth", authRoutes);
+
+app.use('/api/config', configController.getSelectsLists);
+
 
 const portfolioRoutes = require("./services/portfolio/routes/portfolio.route");
 app.use("/api/portfolio", portfolioRoutes);

@@ -1,25 +1,21 @@
-module.exports = (model) => (req, res) => {
+module.exports = (model, options = {}) => async (req, res) => {
   try {
-    model.find((err, data) => {
-      if (err) return res.status(500).send({ message: err });
-      if (!data[0])
-        return res.json({ data: [], message: "No documents were found." });
-      return res.status(200).send({ data });
-    });
+    let data = []
+    if(typeof options.populate === 'undefined') {
+      data = await model.find();
+    } else {
+      data = model.find()
+      Object.keys(options.populate).map((key) => {
+        data.populate(key, options.populate[key]);
+      });
+      data = await data;
+    }
+
+    if (!data) {
+      return res.json({ data: [], message: "No documents were found." });
+    }
+    return res.status(200).send({ data });
   } catch (err) {
     res.status(500).send({ message: err });
   }
 };
-
-// module.exports.getAll = (req, res) => {
-//   try {
-//     CompanyModel.find((err, data) => {
-//       if (err) return res.status(500).send({ message: err });
-//       if (!data[0])
-//         return res.json({ data: [], message: "No documents were found." });
-//       return res.status(200).send({ data });
-//     });
-//   } catch (err) {
-//     res.status(500).send({ message: err });
-//   }
-// };

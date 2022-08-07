@@ -2,9 +2,14 @@ const EmailTemplateModel = require("../models/emailTemplate.model");
 const getAllGeneric = require("../../generics/getAll");
 const createGeneric = require("../../generics/create");
 
-module.exports.getAll = getAllGeneric(EmailTemplateModel);
+let options = {
+  populate: {
+    process: "name",
+  },
+};
+module.exports.getAll = getAllGeneric(EmailTemplateModel, options);
 
-module.exports.create = createGeneric(EmailTemplateModel);
+module.exports.create = createGeneric(EmailTemplateModel, options);
 
 module.exports.delete = (req, res) => {
   const { id } = req.params;

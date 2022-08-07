@@ -8,7 +8,7 @@ export const SidebarProvider = ({ children }) => {
 
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen(!isSidebarOpen);
-  }, [isSidebarOpen]);
+  }, [setIsSidebarOpen,isSidebarOpen]);
 
   const closeSidebar = useCallback(() => {
     setIsSidebarOpen(false);

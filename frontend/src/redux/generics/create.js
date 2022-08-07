@@ -7,9 +7,8 @@ const create = (type, url) =>
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
     });
-    const result = await data.json()
-    console.log(result)
-
+    const result = await data.json();
+    if (!result._id) throw Error(result);
     return result;
   });
 

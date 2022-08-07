@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import Table from "../../components/Table";
-import { Input, Label, Button } from "@windmill/react-ui";
+import { Input, Label, Button, Textarea, Select } from "@windmill/react-ui";
 import { EditIcon } from "../../icons";
-import SectionTitle from "../../components/Typography/SectionTitle";
 
-import { Companies } from "../../redux/features/nailedIt/companies";
-import { companiesSchema } from "../../configs/modelSchemas";
+import { EmailTemplates } from "../../redux/features/nailedIt/emailTemplates";
+import { Config } from "../../redux/features/config";
+import { emailTemplatesSchema } from "../../configs/modelSchemas";
 
 function checkData(data) {
   let valid = true;
@@ -19,11 +19,15 @@ function checkData(data) {
   }
   return valid;
 }
-function CompaniesPage() {
+function EmailTemplatesPage() {
   const dispatch = useDispatch();
-  const collection = useSelector((state) => state.companies.collection);
+  const collection = useSelector((state) => state.emailTemplates.collection);
+  const dataLists = useSelector((state) => state.config.dataLists);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(companiesSchema);
+  const [formValues, setFormValues] = useState({
+    ...emailTemplatesSchema,
+    status: "first",
+  });
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -31,7 +35,8 @@ function CompaniesPage() {
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
-    dispatch(Companies.getAll());
+    dispatch(EmailTemplates.getAll());
+    dispatch(Config.getSelectsLists());
   }, [dispatch]);
 
   // pagination setup
@@ -52,7 +57,7 @@ function CompaniesPage() {
 
   const deleteItem = (id) => {
     return () => {
-      dispatch(Companies.deleteItem(id));
+      dispatch(EmailTemplates.deleteItem(id));
     };
   };
 
@@ -60,7 +65,7 @@ function CompaniesPage() {
     if (!checkData(formValues)) {
       return;
     }
-    dispatch(Companies.create(formValues));
+    dispatch(EmailTemplates.create(formValues));
   };
 
   useEffect(() => {
@@ -74,9 +79,18 @@ function CompaniesPage() {
     }
   }, [pageTable, collection.items]);
 
+  useEffect(() => {
+    if (dataLists.loaded) {
+      setFormValues((s) => ({
+        ...s,
+        process: dataLists.processesList[0]._id,
+      }));
+    }
+  }, [dataLists]);
+
   return (
     <>
-      <PageTitle>Companies</PageTitle>
+      <PageTitle>Email Templates</PageTitle>
       <div>
         <Button
           className="mb-5"
@@ -89,52 +103,72 @@ function CompaniesPage() {
           <div className="flex flex-col">
             <div>
               <div className="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <SectionTitle>Français</SectionTitle>
                 <Label>
-                  <span>Name</span>
+                  <span>Name*</span>
                   <Input name="name" className="mt-1" onChange={updateValues} />
                 </Label>
                 <Label>
-                  <span>Address</span>
+                  <span>Subject*</span>
                   <Input
-                    name="address"
+                    name="subject"
+                    className="mt-1"
+                    onChange={updateValues}
+                  />
+                </Label>
+                <Label>
+                  <span>Header*</span>
+                  <Textarea
+                    name="header"
                     className="mt-1"
                     onChange={updateValues}
                   />
                 </Label>
 
                 <Label>
-                  <span>Email</span>
-                  <Input
-                    name="email"
-                    className="mt-1"
-                    type="email"
-                    onChange={updateValues}
-                  />
-                </Label>
-                <Label>
-                  <span>Contact Gender</span>
-                  <Input
-                    name="contactGender"
+                  <span>Content</span>
+                  <Textarea
+                    name="content"
                     className="mt-1"
                     onChange={updateValues}
                   />
                 </Label>
                 <Label>
-                  <span>Contact Firstname</span>
-                  <Input
-                    name="contactFirstname"
+                  <span>Footer*</span>
+                  <Textarea
+                    name="footer"
                     className="mt-1"
                     onChange={updateValues}
                   />
                 </Label>
                 <Label>
-                  <span>Contact Lastname</span>
-                  <Input
-                    name="contactLastname"
+                  <span>Process</span>
+                  <Select
                     className="mt-1"
+                    value={formValues.process}
+                    name="process"
                     onChange={updateValues}
-                  />
+                  >
+                    {dataLists.processesList?.map((processItem) => (
+                      <option
+                        key={"process_" + processItem.name}
+                        value={processItem._id}
+                      >
+                        {processItem.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Label>
+                <Label>
+                  <span>Status</span>
+                  <Select
+                    className="mt-1"
+                    value={formValues.status}
+                    name="status"
+                    onChange={updateValues}
+                  >
+                    <option value="first">PREMIER ENVOI</option>
+                    <option value="relance">RELANCE</option>
+                  </Select>
                 </Label>
               </div>
             </div>
@@ -151,16 +185,15 @@ function CompaniesPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          className="whiteSpaceNormal"
           columns={[
             { name: "Name" },
-            { name: "Address" },
-            { name: "Email" },
-            { name: "Contact Gender", key: "contactGender" },
-            {
-              name: "Contact Name",
-              type: "concat",
-              keys: ["contactFirstname", "contactLastname"],
-            },
+            { name: "Subject" },
+            { name: "Header" },
+            { name: "Content" },
+            { name: "Footer" },
+            { name: "Process", subKey: "name" },
+            { name: "Status" },
           ]}
           data={dataTable}
           pagination={{
@@ -175,4 +208,4 @@ function CompaniesPage() {
   );
 }
 
-export default CompaniesPage;
+export default EmailTemplatesPage;

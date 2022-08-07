@@ -3,22 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import PageTitle from "../../components/Typography/PageTitle";
 import Table from "../../components/Table";
-import { Input, Label, Button } from "@windmill/react-ui";
+import { Input, Label, Button, Select } from "@windmill/react-ui";
 import { EditIcon } from "../../icons";
-import SectionTitle from "../../components/Typography/SectionTitle";
 
 import { Companies } from "../../redux/features/nailedIt/companies";
 import { companiesSchema } from "../../configs/modelSchemas";
 
-function checkData(data) {
-  let valid = true;
-  for (const key in data) {
-    if (data[key] === "") {
-      valid = false;
-    }
-  }
-  return valid;
-}
 function CompaniesPage() {
   const dispatch = useDispatch();
   const collection = useSelector((state) => state.companies.collection);
@@ -57,12 +47,10 @@ function CompaniesPage() {
   };
 
   const save = () => {
-    if (!checkData(formValues)) {
-      return;
-    }
     dispatch(Companies.create(formValues));
   };
 
+  //populate table data when mounted and page changing
   useEffect(() => {
     if (collection.items.length > 0) {
       setDataTable(
@@ -89,7 +77,6 @@ function CompaniesPage() {
           <div className="flex flex-col">
             <div>
               <div className="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <SectionTitle>Français</SectionTitle>
                 <Label>
                   <span>Name</span>
                   <Input name="name" className="mt-1" onChange={updateValues} />
@@ -114,11 +101,17 @@ function CompaniesPage() {
                 </Label>
                 <Label>
                   <span>Contact Gender</span>
-                  <Input
-                    name="contactGender"
+                  <Select
                     className="mt-1"
+                    name="contactGender"
                     onChange={updateValues}
-                  />
+                  >
+                    {["none", "female", "male"].map((gender, i) => (
+                      <option key={"gender_" + gender} value={i}>
+                        {gender.toUpperCase()}
+                      </option>
+                    ))}
+                  </Select>
                 </Label>
                 <Label>
                   <span>Contact Firstname</span>

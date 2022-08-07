@@ -7,8 +7,8 @@ import { Input, Label, Button } from "@windmill/react-ui";
 import { EditIcon } from "../../icons";
 import SectionTitle from "../../components/Typography/SectionTitle";
 
-import { Companies } from "../../redux/features/nailedIt/companies";
-import { companiesSchema } from "../../configs/modelSchemas";
+import { Processes } from "../../redux/features/nailedIt/processes";
+import { processesSchema } from "../../configs/modelSchemas";
 
 function checkData(data) {
   let valid = true;
@@ -19,11 +19,11 @@ function checkData(data) {
   }
   return valid;
 }
-function CompaniesPage() {
+function ProcessesPage() {
   const dispatch = useDispatch();
-  const collection = useSelector((state) => state.companies.collection);
+  const collection = useSelector((state) => state.processes.collection);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [formValues, setFormValues] = useState(companiesSchema);
+  const [formValues, setFormValues] = useState(processesSchema);
 
   // setup pages control for every table
   const [pageTable, setPageTable] = useState(1);
@@ -31,7 +31,7 @@ function CompaniesPage() {
   const [dataTable, setDataTable] = useState([]);
 
   useEffect(() => {
-    dispatch(Companies.getAll());
+    dispatch(Processes.getAll());
   }, [dispatch]);
 
   // pagination setup
@@ -52,7 +52,7 @@ function CompaniesPage() {
 
   const deleteItem = (id) => {
     return () => {
-      dispatch(Companies.deleteItem(id));
+      dispatch(Processes.deleteItem(id));
     };
   };
 
@@ -60,7 +60,7 @@ function CompaniesPage() {
     if (!checkData(formValues)) {
       return;
     }
-    dispatch(Companies.create(formValues));
+    dispatch(Processes.create(formValues));
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ function CompaniesPage() {
 
   return (
     <>
-      <PageTitle>Companies</PageTitle>
+      <PageTitle>Processes</PageTitle>
       <div>
         <Button
           className="mb-5"
@@ -93,49 +93,7 @@ function CompaniesPage() {
                 <Label>
                   <span>Name</span>
                   <Input name="name" className="mt-1" onChange={updateValues} />
-                </Label>
-                <Label>
-                  <span>Address</span>
-                  <Input
-                    name="address"
-                    className="mt-1"
-                    onChange={updateValues}
-                  />
-                </Label>
-
-                <Label>
-                  <span>Email</span>
-                  <Input
-                    name="email"
-                    className="mt-1"
-                    type="email"
-                    onChange={updateValues}
-                  />
-                </Label>
-                <Label>
-                  <span>Contact Gender</span>
-                  <Input
-                    name="contactGender"
-                    className="mt-1"
-                    onChange={updateValues}
-                  />
-                </Label>
-                <Label>
-                  <span>Contact Firstname</span>
-                  <Input
-                    name="contactFirstname"
-                    className="mt-1"
-                    onChange={updateValues}
-                  />
-                </Label>
-                <Label>
-                  <span>Contact Lastname</span>
-                  <Input
-                    name="contactLastname"
-                    className="mt-1"
-                    onChange={updateValues}
-                  />
-                </Label>
+                </Label>         
               </div>
             </div>
             <Button
@@ -153,14 +111,6 @@ function CompaniesPage() {
         <Table
           columns={[
             { name: "Name" },
-            { name: "Address" },
-            { name: "Email" },
-            { name: "Contact Gender", key: "contactGender" },
-            {
-              name: "Contact Name",
-              type: "concat",
-              keys: ["contactFirstname", "contactLastname"],
-            },
           ]}
           data={dataTable}
           pagination={{
@@ -175,4 +125,4 @@ function CompaniesPage() {
   );
 }
 
-export default CompaniesPage;
+export default ProcessesPage;

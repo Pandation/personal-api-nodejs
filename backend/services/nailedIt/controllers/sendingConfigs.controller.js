@@ -1,10 +1,22 @@
 const SendingConfigModel = require("../models/sendingConfig.model");
+const CompanyModel = require("../models/company.model");
+const ProcessModel = require("../models/process.model");
 const getAllGeneric = require("../../generics/getAll");
 const createGeneric = require("../../generics/create");
 
-module.exports.getAll = getAllGeneric(SendingConfigModel);
+module.exports.getAll = getAllGeneric(SendingConfigModel, {
+  populate: {
+    company: "name",
+    process: "name",
+  },
+});
 
-module.exports.create = createGeneric(SendingConfigModel);
+module.exports.create = createGeneric(SendingConfigModel, {
+  populate: {
+    company: "name",
+    process: "name",
+  },
+});
 
 module.exports.delete = (req, res) => {
   const { id } = req.params;
@@ -13,4 +25,3 @@ module.exports.delete = (req, res) => {
     return res.json(docs);
   });
 };
-

@@ -38,7 +38,7 @@ export const companiesSchema = {
   name: "",
   address: "",
   email: "",
-  contactGender: "",
+  contactGender: "0",
   contactLastname: "",
   contactFirstname: "",
 };
@@ -52,10 +52,14 @@ export const sendingConfigsSchema = {
   customText: "",
   lastMailDate: "",
   nextMailDate: "",
+  enabled: true,
 };
 export const emailTemplatesSchema = {
   name: "",
+  subject: "",
   header: "",
   content: "",
   footer: "",
+  status: "first",
+  process: "",
 };
