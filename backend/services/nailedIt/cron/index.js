@@ -1,5 +1,3 @@
-const cron = require("cron");
-const { resolve } = require("path");
 const path = require("path");
 
 const EmailTemplateModel = require("../models/emailTemplate.model");
@@ -7,82 +5,77 @@ const transporter = require("../../../configs/nodemailer").transporter;
 
 const SendingConfigModel = require("../models/sendingConfig.model");
 
-let nailedIt = cron.job(
-  "0 0 8 * * *",
-  async function () {
-    let sendingsConfigs = await SendingConfigModel.find({ enabled: true })
-      .populate("company", "name contactGender email -_id")
-      .populate("process");
+const nailedItCron = async () => {
+  let sendingsConfigs = await SendingConfigModel.find({ enabled: true })
+    .populate("company", "name contactGender email -_id")
+    .populate("process");
 
-    let mailsInfo = await Promise.all(
-      sendingsConfigs.map(async (sendingConfig) => {
-        // if (sendingConfig.company.email !== "florianbaumes@gmail.com") {
-        //   return null;
-        // }
-        let emailTemplate = await EmailTemplateModel.findOne({
-          process: sendingConfig.process._id,
-          status: sendingConfig.status,
-        });
+  let mailsInfo = await Promise.all(
+    sendingsConfigs.map(async (sendingConfig) => {
+      // if (sendingConfig.company.email !== "florianbaumes@gmail.com") {
+      //   return null;
+      // }
+      let emailTemplate = await EmailTemplateModel.findOne({
+        process: sendingConfig.process._id,
+        status: sendingConfig.status,
+      });
 
-        let content = {
-          header: emailTemplate.header,
-          footer: emailTemplate.footer,
-          content: emailTemplate.content,
-          customText: sendingConfig.customText,
-          gender: sendingConfig.company.contactGender,
-          company: sendingConfig.company.name,
-          firstname: sendingConfig.company.contactFirstname,
-          lastname: sendingConfig.company.contactLastname,
-        };
-        let emailContent = formatterEmailContent(content);
+      let content = {
+        header: emailTemplate.header,
+        footer: emailTemplate.footer,
+        content: emailTemplate.content,
+        customText: sendingConfig.customText,
+        gender: sendingConfig.company.contactGender,
+        company: sendingConfig.company.name,
+        firstname: sendingConfig.company.contactFirstname,
+        lastname: sendingConfig.company.contactLastname,
+      };
+      let emailContent = formatterEmailContent(content);
 
-        return new Promise(function (resolve, reject) {
-          transporter.sendMail(
-            {
-              to: sendingConfig.company.email,
-              from: "florianbaumes@gmail.com",
-              subject: emailTemplate.subject,
-              priority: "high",
-              ...emailContent,
-              attachments: [
-                {
-                  filename: "CV",
-                  path: path.join(__dirname, "../../../files", "CV.pdf"),
-                },
-              ],
-            },
-            (err, info) => {
-              if (!err) {
-                resolve({
-                  company: sendingConfig.company.name,
-                  email: sendingConfig.company.email,
-                  success: info?.message === "success",
-                  process: sendingConfig.process.name,
-                  status: sendingConfig.status,
-                  message: info?.message ?? "",
-                  err,
-                });
-              }
+      return new Promise(function (resolve, reject) {
+        transporter.sendMail(
+          {
+            to: sendingConfig.company.email,
+            from: "florianbaumes@gmail.com",
+            subject: emailTemplate.subject,
+            priority: "high",
+            ...emailContent,
+            attachments: [
+              {
+                filename: "CV",
+                path: path.join(__dirname, "../../../files", "CV.pdf"),
+              },
+            ],
+          },
+          (err, info) => {
+            if (!err) {
+              resolve({
+                company: sendingConfig.company.name,
+                email: sendingConfig.company.email,
+                success: info?.message === "success",
+                process: sendingConfig.process.name,
+                status: sendingConfig.status,
+                message: info?.message ?? "",
+                err,
+              });
             }
-          );
-        });
-      })
-    );
+          }
+        );
+      });
+    })
+  );
 
-    mailsInfo = mailsInfo.filter((info) => info !== null);
+  mailsInfo = mailsInfo.filter((info) => info !== null);
 
-    let logs = mailsInfoToLogs(mailsInfo);
-    transporter.sendMail({
-      to: "florianbaumes@gmail.com",
-      from: "florianbaumes@gmail.com",
-      subject: "Nailed It - Logs",
-      html: logs,
-      priority: "high",
-    });
-  },
-  null,
-  true
-);
+  let logs = mailsInfoToLogs(mailsInfo);
+  transporter.sendMail({
+    to: "florianbaumes@gmail.com",
+    from: "florianbaumes@gmail.com",
+    subject: "Nailed It - Logs",
+    html: logs,
+    priority: "high",
+  });
+};
 
 function mailsInfoToLogs(mailsInfo) {
   if (mailsInfo.length === 0) {
@@ -170,4 +163,4 @@ function textToEmailContent(text, content) {
   };
 }
 
-module.exports = nailedIt;
+module.exports = nailedItCron;
