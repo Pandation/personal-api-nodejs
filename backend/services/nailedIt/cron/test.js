@@ -1,13 +1,9 @@
-const path = require("path");
 var os = require("os");
 var address = require("address");
 var dns = require("node:dns");
 var hostname = os.hostname();
 
-const EmailTemplateModel = require("../models/emailTemplate.model");
 const transporter = require("../../../configs/nodemailer").transporter;
-
-const SendingConfigModel = require("../models/sendingConfig.model");
 
 const testCron = async () => {
   let adresses = await new Promise((resolve, reject) => {
