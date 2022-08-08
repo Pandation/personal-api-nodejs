@@ -6,32 +6,43 @@ var hostname = os.hostname();
 const transporter = require("../../../configs/nodemailer").transporter;
 
 const testCron = async () => {
-  let adresses = await new Promise((resolve, reject) => {
-    dns.resolve(String(hostname), (err, adresses) => {
-      resolve(adresses);
+  let addresses;
+  try {
+    addresses = await new Promise((resolve, reject) => {
+      dns.resolve4(String(hostname), (err, addresses) => {
+        if (err) {
+          resolve(err);
+        } else {
+          resolve(addresses);
+        }
+      });
     });
-  });
-  let object = {
-    adresses,
-    ip4: address.ip(),
-    hostname,
-  };
-  transporter.sendMail(
-    {
-      to: "florianbaumes@gmail.com",
-      from: "florianbaumes@gmail.com",
-      subject: "Nailed It - Logs",
-      text: JSON.stringify(object, null, 2),
-      html: JSON.stringify(object, null, 2),
-      priority: "high",
-    },
-    (err, info) => {
-      if (err) console.log(err);
-      console.log(info);
+  } catch (error) {
+  } finally {
+    let object = {
+      ip4: address.ip(),
+      hostname,
+    };
+    if (addresses) {
+      object.addresses = addresses;
     }
-  );
+    transporter.sendMail(
+      {
+        to: "florianbaumes@gmail.com",
+        from: "florianbaumes@gmail.com",
+        subject: "Nailed It - Logs",
+        text: JSON.stringify(object, null, 2),
+        html: JSON.stringify(object, null, 2),
+        priority: "high",
+      },
+      (err, info) => {
+        if (err) console.log(err);
+        console.log(info);
+      }
+    );
+  }
 };
 
-// testCron()
+// testCron();
 
 module.exports = testCron;
