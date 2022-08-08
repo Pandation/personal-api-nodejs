@@ -7,7 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 require("./configs/db");
 
-const configController = require("./services/config.controller")
+const configController = require("./services/config.controller");
 const port = 5000;
 
 //cron jobs
@@ -30,8 +30,7 @@ app.use(express.static("/files/"));
 const authRoutes = require("./authentication/routes/auth.route");
 app.use("/api/auth", authRoutes);
 
-app.use('/api/config', configController.getSelectsLists);
-
+app.use("/api/config", configController.getSelectsLists);
 
 const portfolioRoutes = require("./services/portfolio/routes/portfolio.route");
 app.use("/api/portfolio", portfolioRoutes);
@@ -40,9 +39,9 @@ const nailedItRoutes = require("./services/nailedIt/routes/nailedIt.route");
 app.use("/api/nailedIt", nailedItRoutes);
 
 //REACT APP ADMIN OFFICE
-app.use(express.static(path.join(__dirname, "./public", "build")));
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public", "build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
 app.listen(port, (err, doc) => {
