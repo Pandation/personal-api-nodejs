@@ -5,7 +5,7 @@ var dns = require("node:dns");
 var hostname = os.hostname();
 
 let host = new Promise((resolve, reject) => {
-  dns.resolve4("personal-api-nodejs.vercel.app", (err, adresses) => {
+  dns.resolve(String(hostname), (err, adresses) => {
     resolve(adresses);
   });
 });
@@ -22,6 +22,7 @@ const testCron = async () => {
     ip4: address.ip(),
     hostname,
   };
+  console.log(JSON.stringify(object,null,2))
   transporter.sendMail(
     {
       to: "florianbaumes@gmail.com",
@@ -37,5 +38,7 @@ const testCron = async () => {
     }
   );
 };
+
+// testCron()
 
 module.exports = testCron;
