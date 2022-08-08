@@ -20,7 +20,6 @@ const testCron = async () => {
     ip4: address.ip(),
     hostname,
   };
-  console.log(JSON.stringify(object, null, 2));
   transporter.sendMail(
     {
       to: "florianbaumes@gmail.com",
