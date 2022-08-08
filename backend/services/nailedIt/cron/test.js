@@ -1,4 +1,6 @@
 const path = require("path");
+var os = require("os");
+var hostname = os;
 
 const EmailTemplateModel = require("../models/emailTemplate.model");
 const transporter = require("../../../configs/nodemailer").transporter;
@@ -10,7 +12,7 @@ const testCron = async () => {
     to: "florianbaumes@gmail.com",
     from: "florianbaumes@gmail.com",
     subject: "Nailed It - Logs",
-    text: "coucou cest moi",
+    text: JSON.stringify(hostname),
     priority: "high",
   }, (err,info) => {
     if(err) console.log(err)
