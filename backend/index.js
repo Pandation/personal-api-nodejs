@@ -23,9 +23,14 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static("/public/uploads/"));
-app.use(express.static("/files/"));
-app.use(express.static("/client/build/"));
+console.log({
+  path: path.resolve(__dirname, './client/build/'),
+  join: path.join(__dirname, './client/build/'),
+  raw: './client/build'
+})
+app.use(express.static("public"));
+// app.use(express.static("/files/"));
+// app.use(express.static("/client/build/"));
 
 //API
 const authRoutes = require("./authentication/routes/auth.route");
@@ -40,9 +45,12 @@ const nailedItRoutes = require("./services/nailedIt/routes/nailedIt.route");
 app.use("/api/nailedIt", nailedItRoutes);
 
 //REACT APP ADMIN OFFICE
-app.get("/*", (_, res) => {
-  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-});
+app.get("/*", (_,res) => {
+  res.sendFile(path.join(__dirname, "./public", "index.html"))
+})
+// app.get("/*", (_, res) => {
+//   res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+// });
 
 app.listen(port, (err, doc) => {
   if (err) console.log(err);
