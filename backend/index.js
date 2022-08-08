@@ -38,6 +38,7 @@ app.use("/api/portfolio", portfolioRoutes);
 const nailedItRoutes = require("./services/nailedIt/routes/nailedIt.route");
 app.use("/api/nailedIt", nailedItRoutes);
 
+console.log(__dirname)
 //REACT APP ADMIN OFFICE
 app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 app.get("/*", (req, res) => {
