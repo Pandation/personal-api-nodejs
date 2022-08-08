@@ -8,7 +8,7 @@ require("dotenv").config();
 require("./configs/db");
 
 const configController = require("./services/config.controller");
-const port = 5000;
+const port = process.env.PORT || 3001;
 
 //cron jobs
 require("./configs/cronJobs");
@@ -25,6 +25,7 @@ app.use(cookieParser());
 
 app.use(express.static("/public/uploads/"));
 app.use(express.static("/files/"));
+app.use(express.static("/client/build/"));
 
 //API
 const authRoutes = require("./authentication/routes/auth.route");
@@ -38,16 +39,17 @@ app.use("/api/portfolio", portfolioRoutes);
 const nailedItRoutes = require("./services/nailedIt/routes/nailedIt.route");
 app.use("/api/nailedIt", nailedItRoutes);
 
-console.log(__dirname)
 //REACT APP ADMIN OFFICE
-app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+  res.sendFile(path.resolve(__dirname, "/client/build", "index.html"));
 });
 
 app.listen(port, (err, doc) => {
   if (err) console.log(err);
-  else console.log("Server started on port " + port);
+  else {
+    console.log("Server started on port " + port);
+    console.log(__dirname);
+  }
 });
 
 //DEV
