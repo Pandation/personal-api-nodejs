@@ -1,6 +1,6 @@
 const path = require("path");
 var os = require("os");
-var hostname = os;
+var hostname = os.hostname();
 
 const EmailTemplateModel = require("../models/emailTemplate.model");
 const transporter = require("../../../configs/nodemailer").transporter;
