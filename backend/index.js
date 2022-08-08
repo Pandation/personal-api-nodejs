@@ -40,8 +40,8 @@ const nailedItRoutes = require("./services/nailedIt/routes/nailedIt.route");
 app.use("/api/nailedIt", nailedItRoutes);
 
 //REACT APP ADMIN OFFICE
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "/client/build", "index.html"));
+app.get("/*", (_, res) => {
+  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
 });
 
 app.listen(port, (err, doc) => {
