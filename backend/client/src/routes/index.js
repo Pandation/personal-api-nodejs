@@ -15,6 +15,7 @@ const Companies = lazy(() => import("../pages/nailedIt/Companies"));
 const EmailTemplates = lazy(() => import("../pages/nailedIt/EmailTemplates"));
 const Processes = lazy(() => import("../pages/nailedIt/Processes"));
 const SendingConfigs = lazy(() => import("../pages/nailedIt/SendingConfigs"));
+const Charts = lazy(() => import("../pages/notUsedThemePages/Charts"));
 
 const Test = lazy(() => import("../pages/Test"));
 
@@ -33,6 +34,10 @@ const routes = [
   {
     path: "/pf/experiences/:id",
     component: Experience,
+  },
+  {
+    path: "/charts",
+    component: Charts,
   },
   // {
   //   path: "/pf/projects",

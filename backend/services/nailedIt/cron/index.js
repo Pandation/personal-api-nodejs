@@ -39,6 +39,7 @@ const nailedItCron = async () => {
             from: "florianbaumes@gmail.com",
             subject: emailTemplate.subject,
             priority: "high",
+            sender: "Florian Baumes",
             ...emailContent,
             attachments: [
               {
