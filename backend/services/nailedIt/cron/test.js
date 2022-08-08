@@ -4,25 +4,23 @@ var address = require("address");
 var dns = require("node:dns");
 var hostname = os.hostname();
 
-let host = new Promise((resolve, reject) => {
-  dns.resolve(String(hostname), (err, adresses) => {
-    resolve(adresses);
-  });
-});
-
 const EmailTemplateModel = require("../models/emailTemplate.model");
 const transporter = require("../../../configs/nodemailer").transporter;
 
 const SendingConfigModel = require("../models/sendingConfig.model");
 
 const testCron = async () => {
-  let adresses = await host;
+  let adresses = await new Promise((resolve, reject) => {
+    dns.resolve(String(hostname), (err, adresses) => {
+      resolve(adresses);
+    });
+  });
   let object = {
     adresses,
     ip4: address.ip(),
     hostname,
   };
-  console.log(JSON.stringify(object,null,2))
+  console.log(JSON.stringify(object, null, 2));
   transporter.sendMail(
     {
       to: "florianbaumes@gmail.com",
