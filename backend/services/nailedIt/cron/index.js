@@ -119,8 +119,6 @@ const nailedItCron = async () => {
   });
 };
 
-nailedItCron();
-
 module.exports = nailedItCron;
 
 function mailsInfoToLogs(mailsInfo, docsUpdated) {

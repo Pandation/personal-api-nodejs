@@ -30,6 +30,5 @@ const emailTemplateSchema = new Schema({
   },
 });
 
-const EmailTemplateModel = mongoose.model("emailTemplate", emailTemplateSchema);
+module.exports == mongoose.model("emailTemplate", emailTemplateSchema);
 
-module.exports = EmailTemplateModel;
