@@ -28,24 +28,28 @@ router.get("/config", portfolioController.getAll);
 
 //CRUD EXPERIENCE
 router.get("/experiences", experiencesController.getAll);
+router.get("/experiences/:id", experiencesController.getOne);
 router.post("/experiences", experiencesController.create);
 router.delete("/experiences/:id", experiencesController.delete);
 router.put("/experiences/:id", experiencesController.update);
 
 //CRUD EDUCATION
 router.get("/educations", educationsController.getAll);
+router.get("/educations/:id", educationsController.getOne);
 router.post("/educations", educationsController.create);
 router.delete("/educations/:id", educationsController.delete);
 router.put("/educations/:id", educationsController.update);
 
 //CRUD LEARNING
 router.get("/learnings", learningsController.getAll);
+router.get("/learnings/:id", learningsController.getOne);
 router.post("/learnings", learningsController.create);
 router.delete("/learnings/:id", learningsController.delete);
 router.put("/learnings/:id", learningsController.update);
 
 //CRUD SKILLS
 router.get("/skills", skillsController.getAll);
+router.get("/skills/:id", skillsController.getOne);
 router.post("/skills", skillsController.create);
 router.delete("/skills/:id", skillsController.delete);
 router.put("/skills/:id", skillsController.update);

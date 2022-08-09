@@ -143,6 +143,8 @@ function SkillsPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          service="pf"
+          type="skills"
           columns={[{ name: "Name" }, { name: "Text" }]}
           data={dataTable}
           pagination={{

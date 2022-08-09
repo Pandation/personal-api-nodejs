@@ -185,6 +185,8 @@ function EmailTemplatesPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          service="ni"
+          type="emailTemplates"
           className="whiteSpaceNormal"
           columns={[
             { name: "Name" },

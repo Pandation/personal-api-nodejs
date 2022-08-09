@@ -1,17 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import createGenericReducer from "./createGenericReducer";
 
+const initialErrorState = {
+  status: false,
+  message: "",
+};
+
 const initialState = {
   delete: {
     fetching: false,
     loaded: false,
-    error: "",
+    error: initialErrorState,
   },
   collection: {
     items: [],
-    error: "",
+    error: initialErrorState,
     fetching: false,
     loaded: false,
+  },
+  item: {
+    data: {},
+    fetching: false,
+    loaded: false,
+    error: initialErrorState,
   },
 };
 

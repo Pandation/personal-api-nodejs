@@ -109,6 +109,8 @@ function ProcessesPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+        service="ni"
+        type="processes"
           columns={[
             { name: "Name" },
           ]}

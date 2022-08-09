@@ -12,9 +12,12 @@ const Experience = lazy(() => import("../pages/portfolio/Experience"));
 const Educations = lazy(() => import("../pages/portfolio/Educations"));
 const Education = lazy(() => import("../pages/portfolio/Education"));
 const Companies = lazy(() => import("../pages/nailedIt/Companies"));
+const Company = lazy(() => import("../pages/nailedIt/Company"));
 const EmailTemplates = lazy(() => import("../pages/nailedIt/EmailTemplates"));
+const EmailTemplate = lazy(() => import("../pages/nailedIt/EmailTemplate"));
 const Processes = lazy(() => import("../pages/nailedIt/Processes"));
 const SendingConfigs = lazy(() => import("../pages/nailedIt/SendingConfigs"));
+const SendingConfig = lazy(() => import("../pages/nailedIt/SendingConfig"));
 const Charts = lazy(() => import("../pages/notUsedThemePages/Charts"));
 
 const Test = lazy(() => import("../pages/Test"));
@@ -76,8 +79,16 @@ const routes = [
     component: Companies,
   },
   {
+    path: "/ni/companies/:id",
+    component: Company,
+  },
+  {
     path: "/ni/sendingConfigs",
     component: SendingConfigs,
+  },
+  {
+    path: "/ni/sendingConfigs/:id",
+    component: SendingConfig,
   },
   {
     path: "/ni/processes",
@@ -86,6 +97,10 @@ const routes = [
   {
     path: "/ni/emailTemplates",
     component: EmailTemplates,
+  },
+  {
+    path: "/ni/emailTemplates/:id",
+    component: EmailTemplate,
   },
   {
     path: '/test',

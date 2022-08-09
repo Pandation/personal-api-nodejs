@@ -3,7 +3,7 @@ const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 let type = "config";
 let url = "/api/config";
 let baseUrl =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000";
+  process.env.NODE_ENV === "production" ? "" : process.env.REACT_APP_API_URL;
 const apiUrl = baseUrl + url;
 
 const getSelectsLists = createAsyncThunk(

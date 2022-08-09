@@ -6,19 +6,39 @@ const transporter = require("../../../configs/nodemailer").transporter;
 const SendingConfigModel = require("../models/sendingConfig.model");
 
 const nailedItCron = async () => {
-  let sendingsConfigs = await SendingConfigModel.find({ enabled: true })
+  let today = new Date();
+  let sendingConfigs = await SendingConfigModel.find({ enabled: true })
     .populate("company", "name contactGender email -_id")
     .populate("process");
 
   let mailsInfo = await Promise.all(
-    sendingsConfigs.map(async (sendingConfig) => {
+    sendingConfigs.map(async (sendingConfig) => {
       // if (sendingConfig.company.email !== "florianbaumes@gmail.com") {
       //   return null;
       // }
+      if (
+        sendingConfig.nextMailDate &&
+        today.toLocaleDateString() !==
+          sendingConfig.nextMailDate.toLocaleDateString()
+      ) {
+        return null;
+      }
       let emailTemplate = await EmailTemplateModel.findOne({
         process: sendingConfig.process._id,
         status: sendingConfig.status,
       });
+      if (!emailTemplate) {
+        return {
+          idSendingConfig: sendingConfig._id,
+          company: sendingConfig.company.name,
+          email: sendingConfig.company.email,
+          success: false,
+          process: sendingConfig.process.name,
+          status: sendingConfig.status,
+          message: "no template for this config",
+          err: true,
+        };
+      }
 
       let content = {
         header: emailTemplate.header,
@@ -49,17 +69,16 @@ const nailedItCron = async () => {
             ],
           },
           (err, info) => {
-            if (!err) {
-              resolve({
-                company: sendingConfig.company.name,
-                email: sendingConfig.company.email,
-                success: info?.message === "success",
-                process: sendingConfig.process.name,
-                status: sendingConfig.status,
-                message: info?.message ?? "",
-                err,
-              });
-            }
+            resolve({
+              idSendingConfig: sendingConfig._id,
+              company: sendingConfig.company.name,
+              email: sendingConfig.company.email,
+              success: info?.message === "success",
+              process: sendingConfig.process.name,
+              status: sendingConfig.status,
+              message: info?.message ?? "",
+              err,
+            });
           }
         );
       });
@@ -68,7 +87,29 @@ const nailedItCron = async () => {
 
   mailsInfo = mailsInfo.filter((info) => info !== null);
 
-  let logs = mailsInfoToLogs(mailsInfo);
+  let idsToUpdate = [];
+
+  mailsInfo.forEach((info) => {
+    if (info.success === true) {
+      idsToUpdate.push(info.idSendingConfig);
+    }
+  });
+
+  let inTwoWeeks = new Date();
+  inTwoWeeks.setDate(inTwoWeeks.getDate() + 14);
+
+  let configsUpdated = await SendingConfigModel.updateMany(
+    {
+      _id: { $in: idsToUpdate },
+    },
+    {
+      status: "relance",
+      lastMailDate: today,
+      nextMailDate: inTwoWeeks,
+    }
+  );
+
+  let logs = mailsInfoToLogs(mailsInfo, configsUpdated);
   transporter.sendMail({
     to: "florianbaumes@gmail.com",
     from: "florianbaumes@gmail.com",
@@ -78,28 +119,47 @@ const nailedItCron = async () => {
   });
 };
 
-function mailsInfoToLogs(mailsInfo) {
+nailedItCron();
+
+module.exports = nailedItCron;
+
+function mailsInfoToLogs(mailsInfo, docsUpdated) {
   if (mailsInfo.length === 0) {
     return "No datas";
   }
 
-  let border = "'border : solid 1px black; border-collapse: collapse;'";
-  let padding = "'padding: 3px'";
-  let style = {
-    th: "'background-color : darkgrey; color: white;'" + border + padding,
-    td: border + padding,
+  let styles = {
+    table: `'
+  border: solid 2px black;
+  border-collapse: collapse;
+  '`,
+    th: `'
+  padding: 5px;
+  color: white;
+  background-color: darkgrey;
+  font-size: 16px;
+  border: solid 2px black;
+  '`,
+    td: `'
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
+  border: solid 2px black;
+  border-collapse: collapse;
+  '`,
   };
   let html = `
-    <table style=${border}>
+    <h2>Tableau récapitulatif des envois:</h2>
+    <table style=${styles.table}>
         <thead>
             <tr>
-                <th style=${style.th}>COMPANY</th>
-                <th style=${style.th}>EMAIL</th>
-                <th style=${style.th}>SUCCESS</th>
-                <th style=${style.th}>PROCESS</th>
-                <th style=${style.th}>STATUS</th>
-                <th style=${style.th}>MESSAGE</th>
-                <th style=${style.th}>ERROR</th>
+                <th style=${styles.th}>COMPANY</th>
+                <th style=${styles.th}>EMAIL</th>
+                <th style=${styles.th}>SUCCESS</th>
+                <th style=${styles.th}>PROCESS</th>
+                <th style=${styles.th}>STATUS</th>
+                <th style=${styles.th}>MESSAGE</th>
+                <th style=${styles.th}>ERROR</th>
             </tr>
         </thead>
     <tbody>`;
@@ -107,18 +167,24 @@ function mailsInfoToLogs(mailsInfo) {
   mailsInfo.forEach((mailInfo) => {
     html += `
         <tr>
-            <td style=${style.td}>${mailInfo.company}</td>
-            <td style=${style.td}>${mailInfo.email}</td>
-            <td style=${style.td}>${mailInfo.success}</td>
-            <td style=${style.td}>${mailInfo.process}</td>
-            <td style=${style.td}>${mailInfo.status}</td>
-            <td style=${style.td}>${mailInfo.message}</td>
-            <td style=${style.td}>${JSON.stringify(mailInfo.err)}</td>
+            <td style=${styles.td}>${mailInfo.company}</td>
+            <td style=${styles.td}>${mailInfo.email}</td>
+            <td style=${styles.td}>${mailInfo.success}</td>
+            <td style=${styles.td}>${mailInfo.process}</td>
+            <td style=${styles.td}>${mailInfo.status}</td>
+            <td style=${styles.td}>${mailInfo.message}</td>
+            <td style=${styles.td}>${JSON.stringify(mailInfo.err)}</td>
         </tr>`;
   });
 
   html += `</tbody>
     </table>`;
+
+  html += `
+    <pre style="font-size : 14px;">
+    ${JSON.stringify(docsUpdated, null, 2)}
+    </pre>
+  `;
 
   return html;
 }
@@ -163,5 +229,3 @@ function textToEmailContent(text, content) {
     html: content.html + `<p>${text}</p>`,
   };
 }
-
-module.exports = nailedItCron;

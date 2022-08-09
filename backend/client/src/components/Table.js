@@ -65,7 +65,7 @@ const DataTable = (props) => {
                   })}
                   <TableCell>
                     <div className="flex items-center space-x-4">
-                      <Link to={`/pf/educations/${document._id}`}>
+                      <Link to={`/${props.service}/${props.type}/${document._id}`}>
                         <Button layout="link" size="icon" aria-label="Edit">
                           <EditIcon className="w-5 h-5" aria-hidden="true" />
                         </Button>

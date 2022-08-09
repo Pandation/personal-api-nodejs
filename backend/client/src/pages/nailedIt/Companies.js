@@ -144,6 +144,8 @@ function CompaniesPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          service="ni"
+          type="companies"
           columns={[
             { name: "Name" },
             { name: "Address" },

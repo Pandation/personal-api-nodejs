@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 const create = (type, url) =>
-  createAsyncThunk(`${type}/create`, async (params = {}, callback = "") => {
+  createAsyncThunk(`${type}/create`, async (params = {}) => {
     const data = await fetch(url + "/" + type, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

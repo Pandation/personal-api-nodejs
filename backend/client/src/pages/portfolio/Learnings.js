@@ -105,6 +105,8 @@ function LearningsPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          service="pf"
+          type="learnings"
           columns={[{ name: "Name" }]}
           data={dataTable}
           pagination={{

@@ -2,12 +2,15 @@ const ExperienceModel = require("../models/experience.model");
 const createGeneric = require("../../generics/create");
 const getAllGeneric = require("../../generics/getAll");
 const deleteGeneric = require("../../generics/delete");
+const getOneGeneric = require("../../generics/getOne");
 
 module.exports.getAll = getAllGeneric(ExperienceModel);
 
 module.exports.create = createGeneric(ExperienceModel);
 
 module.exports.delete = deleteGeneric(ExperienceModel);
+
+module.exports.getOne = getOneGeneric(ExperienceModel);
 
 module.exports.update = async (req, res) => {
   const { id } = req.params;

@@ -76,7 +76,7 @@ const middleware = (dispatch) => (action) => {
   let baseUrl = "";
 
   if (window.location.origin === "http://localhost:3000") {
-    baseUrl = "http://localhost:5000";
+    baseUrl = process.env.REACT_APP_API_URL;
   }
   switch (action.type) {
     case AUTH.LOGOUT:

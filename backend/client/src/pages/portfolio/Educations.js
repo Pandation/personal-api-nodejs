@@ -182,6 +182,8 @@ function EducationsPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+        service="pf"
+        type="educations"
           columns={[
             { name: "Title" },
             { name: "School" },

@@ -1,41 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import createGenericReducer from "../../generics/createGenericReducer";
+import createGenericSlice from "../../generics/createGenericSlice";
 
-const type = "sendingConfigs";
-const url = "/api/nailedIt";
-
-const initialState = {
-  delete: {
-    fetching: false,
-    loaded: false,
-    error: "",
-  },
-  collection: {
-    items: [],
-    error: "",
-    fetching: false,
-    loaded: false,
-    lists: {
-      companiesList: [],
-      processesList: [],
-      error: false,
-    },
-  },
-};
-
-const extraReducers = createGenericReducer(type, url);
-
-const slice = createSlice({
-  name: type,
-  initialState,
-  extraReducers: {
-    ...extraReducers.reducers,
-  },
-});
+const sendingConfigsSlice = createGenericSlice("sendingConfigs", "/api/nailedIt");
 
 export const SendingConfigs = {
-  ...slice.actions,
-  ...extraReducers.actions,
+  ...sendingConfigsSlice.actions,
 };
 
-export default slice.reducer;
+export default sendingConfigsSlice.reducers;

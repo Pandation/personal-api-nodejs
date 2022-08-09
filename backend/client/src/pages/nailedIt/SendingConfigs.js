@@ -49,7 +49,9 @@ function SendingConfigsPage() {
 
   const deleteItem = (id) => {
     return () => {
-      dispatch(SendingConfigs.deleteItem(id));
+      if(window.confirm('Etes-vous sûr de vouloir supprimer cet élément?')) {
+        dispatch(SendingConfigs.deleteItem(id));
+      }
     };
   };
 
@@ -78,7 +80,7 @@ function SendingConfigsPage() {
   useEffect(() => {
     if (dataLists.loaded) {
       console.log(dataLists.companiesList);
-      setFormValues(s => ({
+      setFormValues((s) => ({
         ...s,
         company: dataLists.companiesList?.[0]._id,
         process: dataLists.processesList?.[0]._id,
@@ -99,7 +101,7 @@ function SendingConfigsPage() {
         </Button>
         {isFormOpen && (
           <div className="flex flex-col">
-            {!collection.lists.error && (
+            {!dataLists.error.status && (
               <>
                 <div>
                   <div className="px-4 py-3 mb-2 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -143,7 +145,7 @@ function SendingConfigsPage() {
                       <span>Status</span>
                       <Select
                         className="mt-1"
-                        name="company"
+                        name="status"
                         onChange={updateValues}
                       >
                         <option value="first">PREMIER ENVOI</option>
@@ -188,6 +190,8 @@ function SendingConfigsPage() {
       {collection.fetching && <p>Chargement...</p>}
       {collection.loaded && collection.items.length > 0 && (
         <Table
+          type="sendingConfigs"
+          service="ni"
           columns={[
             { name: "Company", subKey: "name" },
             { name: "Process", subKey: "name" },
