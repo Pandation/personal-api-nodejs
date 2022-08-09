@@ -13,9 +13,8 @@ const nailedItCron = async () => {
 
   let mailsInfo = await Promise.all(
     sendingConfigs.map(async (sendingConfig) => {
-      // if (sendingConfig.company.email !== "florianbaumes@gmail.com") {
-      //   return null;
-      // }
+
+      //return if no good date to send
       if (
         sendingConfig.nextMailDate &&
         today.toLocaleDateString() !==
@@ -23,6 +22,7 @@ const nailedItCron = async () => {
       ) {
         return null;
       }
+
       let emailTemplate = await EmailTemplateModel.findOne({
         process: sendingConfig.process._id,
         status: sendingConfig.status,
@@ -195,29 +195,52 @@ function formatterEmailContent(content) {
 
   const genderDescriptions = ["Madame, Monsieur, ", "Monsieur, ", "Madame, "];
   let genderDescription = genderDescriptions[parseInt(content.gender)];
+  let companyName = content.company;
 
+  let dynamicContent = replaceAllKeyWords(
+    content,
+    companyName,
+    genderDescription
+  );
   //Ajout Madame, Monsieur
   emailContent = textToEmailContent(genderDescription, emailContent);
 
   //Ajout Intro
-  emailContent = textToEmailContent(content.header, emailContent);
+  emailContent = textToEmailContent(dynamicContent.header, emailContent);
 
   //Ajout Paragraphe principal
-  emailContent = textToEmailContent(content.content, emailContent);
+  emailContent = textToEmailContent(dynamicContent.content, emailContent);
 
   //ajout texte custom si existant
   if (content.customText) {
-    emailContent = textToEmailContent(content.customText, emailContent);
+    emailContent = textToEmailContent(dynamicContent.customText, emailContent);
   }
 
   //ajout salutations
-  emailContent = textToEmailContent(content.footer, emailContent);
+  emailContent = textToEmailContent(dynamicContent.footer, emailContent);
 
   //signature
   emailContent = textToEmailContent("Cordialement,", emailContent);
   emailContent = textToEmailContent("Florian Baumes", emailContent);
 
   return emailContent;
+}
+
+function replaceAllKeyWords(content, companyName, genderDescription) {
+  let newContent = { ...content };
+  const keysToCheck = ["header", "footer", "content", "custom"];
+  keysToCheck.map((key) => {
+    if (newContent[key] && newContent[key].includes("%name%")) {
+      newContent[key] = newContent[key].replaceAll("%name%", companyName);
+    }
+    if (newContent[key] && newContent[key].includes("%genderDescription%")) {
+      newContent[key] = newContent[key].replaceAll(
+        "%genderDescription%",
+        genderDescription
+      );
+    }
+  });
+  return newContent;
 }
 
 function textToEmailContent(text, content) {

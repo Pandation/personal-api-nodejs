@@ -29,4 +29,6 @@ const sendingConfigSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model("sendingConfig", sendingConfigSchema);
+const SendingConfigModel = mongoose.model("sendingConfig", sendingConfigSchema);
+
+module.exports = SendingConfigModel
