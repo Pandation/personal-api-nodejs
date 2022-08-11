@@ -172,7 +172,7 @@ function mailsInfoToLogs(mailsInfo, docsUpdated) {
             <td style=${styles.td}>${mailInfo.status}</td>
             <td style=${styles.td}>${mailInfo.message}</td>
             <td style=${styles.td}>${JSON.stringify(mailInfo.err)}</td>
-        </tr>`;
+        </tr>`; 
   });
 
   html += `</tbody>
